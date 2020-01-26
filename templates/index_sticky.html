@@ -1,0 +1,79 @@
+{% extends "template.html" %}
+
+{% block addition_css %}
+{% endblock %}
+
+{% block addition_js %}
+<!-- <script src="http://wolfpc/recrepo/vue/vue-2.6.11-dev.js"></script> -->
+{% endblock %}
+
+{% block body %}
+
+<div class="panel panel-default" style="width:390px;display: inline-block;vertical-align: top;">
+        <div class="panel-heading">
+                  <h3 class="panel-title">Panel title</h3>
+        </div>
+        <div class="panel-body">
+            <form action="" method="POST" role="form">
+                  <!-- <legend>Send new sticky</legend> -->
+            
+                  <div class="form-group">
+                        <label>title</label>
+                        <input type="text" class="form-control" id="" placeholder="Input Title">
+                  </div>
+                  <div class="form-group">
+                        <label>con</label>
+                        <textarea class="form-control" rows="3" placeholder="Input Con"></textarea>
+                  </div>
+                  <div class="form-group">
+                        <label>time</label>
+                        <input type="text" class="form-control" placeholder="Input Time">
+                  </div>
+                  <div class="form-group">
+                        <label>devName</label>
+                        <input type="text" class="form-control" placeholder="Input DevName">
+                  </div>
+                  <div class="form-group">
+                        <label>send IP</label>
+                        <input type="text" class="form-control" placeholder="Input IP">
+                  </div>
+            
+                  <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+</div>
+
+<div class="panel panel-default" style="display: inline-block;vertical-align: top;">
+        <div class="panel-heading">
+                  <h3 class="panel-title">Panel title</h3>
+        </div>
+        <div class="panel-body">
+                  
+                  <table class="table table-bordered table-hover">
+                        <thead>
+                              <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Con</th>
+                                    <th>Time</th>
+                                    <th>devName</th>
+                                    <th>send IP</th>
+                                    <th>Operate</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                              </tr>
+                        </tbody>
+                  </table>
+                  
+        </div>
+</div>
+{% endblock %}
