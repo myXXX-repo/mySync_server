@@ -8,18 +8,20 @@
     }
 
     .con_body_item {
-        display: block;
-        /* vertical-align: top; */
-    }
-    .panel_body{
         display: inline-block;
-        width: 300px;
+        vertical-align: top;
     }
 
-    /* .panel {
+    .panel_body {
+        /* width: fit-content; */
+        display: inline;
+        /* width: 300px; */
+    }
+
+    .panel {
         margin-bottom: 3px;
         margin-right: 5px;
-    } */
+    }
 
     /* .display{
         overflow-y: scroll;
@@ -62,7 +64,7 @@
 <hr>
 
 <div class="panel panel-default" id="Statistics_panel">
-    <div class="panel-heading">
+    <div class="panel-heading" @click=initStatisticsData()>
         <h3 class="panel-title">{{title}}</h3>
     </div>
     <div class="panel-body" id="display">
@@ -78,12 +80,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in data">
+                <tr v-for="item in apis">
+                    <td>{{item.appname}}</td>
                     <td>{{item.apiname}}</td>
-                    <td><a :href=this_address+item.apiroute>{{item.apiroute}}</a></td>
                     <td>{{item.method}}</td>
-                    <td>{{item.numberofcalls}}</td>
-                    <td>{{item.lasttime}}</td>
+                    <td>{{item.NumOfCall}}</td>
+                    <td>{{item.LastCallTime}}</td>
                     <td><a href="#">set to zero</a></td>
                 </tr>
             </tbody>

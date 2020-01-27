@@ -14,6 +14,7 @@ let init = function () {
         localStorage.setItem('api_list_show_Sticky', 'true');
         localStorage.setItem('api_list_show_tabSync', 'true');
         localStorage.setItem('api_list_show_toDoList', 'true');
+        localStorage.setItem('api_list_show_statistics', 'true')
     }
 }
 init();
@@ -55,10 +56,9 @@ new Vue({
             },
             {
                 title: "statistics",
-                show_list: toBool(localStorage.getItem('api_list_show_toDoList')),
+                show_list: toBool(localStorage.getItem('api_list_show_statistics')),
                 list: [
                     { api_name: "statistics", method: "GET", routes: "/statistics", details: "" },
-                    { api_name: "statistics/raw", method: "GET", routes: "/statistics/raw", details: "" },
                 ]
             }
         ]
@@ -76,16 +76,48 @@ new Vue({
     data: {
         this_address: getCurrentAddress(),
         title: "Api Call Statistics",
-        th: ['Api Name', 'Api Route', 'Methods', 'Number Of Calls', 'Last Call Time', 'Operation'],
-        data: [
-            { apiname: 'Sticky index', apiroute: '/v2/sticky', method: 'GET', numberofcalls: 20, lasttime: '2017-11-30 15:30:33' },
-            { apiname: 'get Sticky', apiroute: '/v2/sticky/get', method: 'GET POST', numberofcalls: 20, lasttime: '2017-11-30 15:30:33' },
-            { apiname: 'add Sticky', apiroute: '/v2/sticky/add', method:'GET POST',numberofcalls: 20, lasttime: '2017-11-30 15:30:33' },
-            { apiname: 'del Sticky', apiroute: '/v2/sticky/del', method:'GET POST',numberofcalls: 20, lasttime: '2017-11-30 15:30:33' },
-        ]
+        th: ['App Name', 'Api Name', 'Methods', 'Number Of Calls', 'Last Call Time', 'Operation'],
+        apis: []
+        // tmp: "",
     },
     methods: {
+        initStatisticsData() {
+            this.apis = [];
+            let that = this
+            axios.get('/statistics').then(function (response) {
+                console.log(response.data)
+                response.data.forEach(app => {
+                    app.apis.forEach(api => {
+                        var tmp = {};
+                        tmp.appname = app.appname;
+                        tmp.apiname = api.apiname;
+                        tmp.method = api.method;
+                        tmp.NumOfCall = api.NumOfCall;
+                        tmp.LastCallTime = api.LastCallTime;
 
+                        that.apis.push(tmp);
+                    });
+                });
+            });
+        },
+    },
+    mounted: function () {
+        this.apis = [];
+        let that = this
+        axios.get('/statistics').then(function (response) {
+            console.log(response.data)
+            response.data.forEach(app => {
+                app.apis.forEach(api => {
+                    var tmp = {};
+                    tmp.appname = app.appname;
+                    tmp.apiname = api.apiname;
+                    tmp.method = api.method;
+                    tmp.NumOfCall = api.NumOfCall;
+                    tmp.LastCallTime = api.LastCallTime;
+
+                    that.apis.push(tmp);
+                });
+            });
+        });
     }
 });
-

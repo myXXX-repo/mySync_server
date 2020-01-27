@@ -141,11 +141,18 @@ def error_505(e):
 
 class Statistics:
     def __init__(self):
-        self.apis={}
+        self.apis=[]
         self.createDataBody()
     def rec(self,appname,apiname,method):
-        self.apis[appname][apiname][method][0]+=1
-        self.apis[appname][apiname][method][1]=str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()))
+        for app in self.apis:
+            if app['appname'] == appname:
+                for api in app['apis']:
+                    if api['apiname'] == apiname:
+                        if api['method'] == method:
+                            api['NumOfCall']+=1
+                            api['LastCallTime'] = str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()))
+                            return
+        return
     def createDataBody(self):
         bodySeed = [
             ['Index',[
@@ -174,11 +181,19 @@ class Statistics:
             ]]
         ]
         for app in bodySeed:
-            self.apis[app[0]]={}
+            appnodetmp = {}
+            appnodetmp["appname"]=app[0]
+            appnodetmp["apis"]=[]
             for api in app[1]:
-                self.apis[app[0]][api[0]]={}
                 for method in api[1]:
-                    self.apis[app[0]][api[0]][method]=[0,'null']
+                    apinodetmp = {}
+                    apinodetmp["apiname"]=api[0]
+                    apinodetmp["method"]=method
+                    apinodetmp["NumOfCall"]=0
+                    apinodetmp["LastCallTime"]="N/A"
+                    appnodetmp["apis"].append(apinodetmp)
+            self.apis.append(appnodetmp)
+            
 statistics = Statistics()
 
 class JsonArray:
@@ -287,14 +302,13 @@ def toDoList_del():
 
 
 @app.route('/statistics',methods=['GET'])
-def getStatistics_raw():
+def getStatistics():
     statistics.rec('statistics','statistics',request.method)
     return json.dumps(statistics.apis)
 
-@app.route('/statistics/raw',methods=['GET'])
-def getStatistics():
-    statistics.rec('statistics','statistics',request.method)
-    return statistics.apis
+@app.route('/statistics/reset',methods=['GET'])
+def resetStatistics():
+    pass
 
 
 @app.route('/config', methods=['GET'])
