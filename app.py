@@ -4,6 +4,7 @@ from flask import url_for
 from flask import redirect
 from flask import request
 from flask import abort
+from os import path
 import json
 import time
 
@@ -139,102 +140,143 @@ def error_505(e):
 
 # re_define route
 
+class FileCtrl:  # ctrl file
+    def __init__(self, filePath):
+        self.filePath = filePath
+
+    def write_append(self, str):
+        with open(self.filePath, 'a') as filefd:
+            filefd.write(str+'\n')
+
+    def write_cover(self, str):
+        with open(self.filePath, 'w') as filefd:
+            filefd.write(str)
+
+    def read(self, AUTOCREATE=0):
+        data_to_return = ""
+        if path.isfile(self.filePath):
+            # if file exists
+            # read file and return data
+            with open(self.filePath, 'r') as filefd:
+                data_to_return = filefd.read()
+        else:
+            # if file not exists
+            if AUTOCREATE == 1:
+                with open(self.filePath, 'w') as filefd:
+                    filefd.write("")
+                pass
+        return data_to_return
+
+
 class Statistics:
     def __init__(self):
-        self.apis=[]
-        self.createDataBody()
-    def rec(self,appname,apiname,method):
+        self.apis = []
+        self.fileCtrl = FileCtrl("Statistics.json")
+        jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
+        if jsonDatatmp != "":
+            self.apis = json.loads(jsonDatatmp)
+        else:
+            self.createDataBody()
+
+    def rec(self, appname, apiname, method):
         for app in self.apis:
-            if app['appname'] == appname:
-                for api in app['apis']:
+            if app["appname"] == appname:
+                for api in app["apis"]:
                     if api['apiname'] == apiname:
                         if api['method'] == method:
-                            api['NumOfCall']+=1
-                            api['LastCallTime'] = str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()))
+                            api['NumOfCall'] += 1
+                            api['LastCallTime'] = str(time.strftime(
+                                '%Y-%m-%d %H:%M:%S', time.localtime()))
+                            self.fileCtrl.write_cover(json.dumps(self.apis))
                             return
         return
+
     def createDataBody(self):
         bodySeed = [
-            ['Index',[
-                ['IndexPage',['GET']]
+            ['Index', [
+                ['IndexPage', ['GET']]
             ]],
-            ['Sticky',[
-                ['StickyIndex',['GET']],
-                ['getSticky',['GET','POST']],
-                ['addSticky',['GET','POST']],
-                ['delSticky',['GET','POST']],
+            ['Sticky', [
+                ['StickyIndex', ['GET']],
+                ['getSticky', ['GET', 'POST']],
+                ['addSticky', ['GET', 'POST']],
+                ['delSticky', ['GET', 'POST']],
             ]],
-            ['tabSync',[
-                ['tabSyncIndex',['GET']],
-                ['gettabSync',['GET','POST']],
-                ['addtabSync',['GET','POST']],
-                ['deltabSync',['GET','POST']],
+            ['tabSync', [
+                ['tabSyncIndex', ['GET']],
+                ['gettabSync', ['GET', 'POST']],
+                ['addtabSync', ['GET', 'POST']],
+                ['deltabSync', ['GET', 'POST']],
             ]],
-            ['toDoList',[
-                ['toDoListIndex',['GET']],
-                ['gettoDoList',['GET','POST']],
-                ['addtoDoList',['GET','POST']],
-                ['deltoDoList',['GET','POST']],
+            ['toDoList', [
+                ['toDoListIndex', ['GET']],
+                ['gettoDoList', ['GET', 'POST']],
+                ['addtoDoList', ['GET', 'POST']],
+                ['deltoDoList', ['GET', 'POST']],
             ]],
-            ['statistics',[
-                ['statistics',['GET']]
+            ['statistics', [
+                ['statistics', ['GET']]
             ]]
         ]
         for app in bodySeed:
             appnodetmp = {}
-            appnodetmp["appname"]=app[0]
-            appnodetmp["apis"]=[]
+            appnodetmp["appname"] = app[0]
+            appnodetmp["apis"] = []
             for api in app[1]:
                 for method in api[1]:
                     apinodetmp = {}
-                    apinodetmp["apiname"]=api[0]
-                    apinodetmp["method"]=method
-                    apinodetmp["NumOfCall"]=0
-                    apinodetmp["LastCallTime"]="N/A"
+                    apinodetmp["apiname"] = api[0]
+                    apinodetmp["method"] = method
+                    apinodetmp["NumOfCall"] = 0
+                    apinodetmp["LastCallTime"] = "N/A"
                     appnodetmp["apis"].append(apinodetmp)
             self.apis.append(appnodetmp)
-            
+
+
 statistics = Statistics()
+
 
 class JsonArray:
     def __init__(self):
         self.jsonArray = []
+
     def get(self):
         return self.jsonArray
-    def add(self,new):
+
+    def add(self, new):
         self.jsonArray.append(new)
+
     def clear(self):
         self.jsonArray = []
+
 
 sticky = JsonArray()
 tabSync = JsonArray()
 toDoList = JsonArray()
 
-        
 
 @app.route('/')
 def index():
-    statistics.rec('Index','IndexPage',request.method)
+    statistics.rec('Index', 'IndexPage', request.method)
     return render_template('index.html', title1="mySync", title2="index")
 
 # app_sticky
 @app.route('/v2/Sticky', methods=['GET'])
 def sticky_index():
-    statistics.rec('Sticky','StickyIndex',request.method)
-    return render_template('index_sticky.html',title1="Sticky",title2="index")
+    statistics.rec('Sticky', 'StickyIndex', request.method)
+    return render_template('index_sticky.html', title1="Sticky", title2="index")
 
 
 @app.route('/v2/Sticky/get', methods=['GET', 'POST'])
 def sticky_get():
-    statistics.rec('Sticky','getSticky',request.method)
+    statistics.rec('Sticky', 'getSticky', request.method)
     return json.dumps(sticky.get())
-
 
 
 @app.route('/v2/Sticky/add', methods=['GET', 'POST'])
 def sticky_add():
     newdata = 'null'
-    statistics.rec('Sticky','addSticky',request.method)
+    statistics.rec('Sticky', 'addSticky', request.method)
     if request.method == 'GET':
         newdata = request.args.to_dict()
     elif request.method == 'POST':
@@ -249,64 +291,66 @@ def sticky_add():
 
 @app.route('/v2/Sticky/del', methods=['GET', 'POST'])
 def sticky_del():
-    statistics.rec('Sticky','delSticky',request.method)
+    statistics.rec('Sticky', 'delSticky', request.method)
     return abort(404)
 
 # app_tabSync
 @app.route('/v2/tabSync', methods=['GET'])
 def tabSync_index():
-    statistics.rec('tabSync','tabSyncIndex',request.method)
+    statistics.rec('tabSync', 'tabSyncIndex', request.method)
     return abort(404)
 
 
 @app.route('/v2/tabSync/get', methods=['GET', 'POST'])
 def tabSync_get():
-    statistics.rec('tabSync','gettabSync',request.method)
+    statistics.rec('tabSync', 'gettabSync', request.method)
     return abort(404)
 
 
 @app.route('/v2/tabSync/add', methods=['GET', 'POST'])
 def tabSync_add():
-    statistics.rec('tabSync','addtabSync',request.method)
+    statistics.rec('tabSync', 'addtabSync', request.method)
+    # sticky.add({"title":"thisistitle","con":"this is con"})
     return abort(404)
 
 
 @app.route('/v2/tabSync/del', methods=['GET', 'POST'])
 def tabSync_del():
-    statistics.rec('tabSync','deltabSync',request.method)
+    statistics.rec('tabSync', 'deltabSync', request.method)
     return abort(404)
 
 # app_toDoList
 @app.route('/v2/toDoList', methods=['GET'])
 def toDoList_index():
-    statistics.rec('toDoList','toDoListIndex',request.method)
+    statistics.rec('toDoList', 'toDoListIndex', request.method)
     return abort(404)
 
 
 @app.route('/v2/toDoList/get', methods=['GET', 'POST'])
 def toDoList_get():
-    statistics.rec('toDoList','gettoDoList',request.method)
+    statistics.rec('toDoList', 'gettoDoList', request.method)
     return abort(404)
 
 
 @app.route('/v2/toDoList/add', methods=['GET', 'POST'])
 def toDoList_add():
-    statistics.rec('toDoList','addtoDoList',request.method)
+    statistics.rec('toDoList', 'addtoDoList', request.method)
     return abort(404)
 
 
 @app.route('/v2/toDoList/del', methods=['GET', 'POST'])
 def toDoList_del():
-    statistics.rec('toDoList','deltoDoList',request.method)
+    statistics.rec('toDoList', 'deltoDoList', request.method)
     return abort(404)
 
 
-@app.route('/statistics',methods=['GET'])
+@app.route('/statistics', methods=['GET'])
 def getStatistics():
-    statistics.rec('statistics','statistics',request.method)
+    statistics.rec('statistics', 'statistics', request.method)
     return json.dumps(statistics.apis)
 
-@app.route('/statistics/reset',methods=['GET'])
+
+@app.route('/statistics/reset', methods=['GET'])
 def resetStatistics():
     pass
 
@@ -328,4 +372,8 @@ def rest_error_page(error_code):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    app.run(
+        debug=True, 
+        threaded=True,
+        host="0.0.0.0"
+        )
