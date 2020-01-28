@@ -216,7 +216,7 @@ class Statistics:
             ]],
             ['statistics', [
                 ['statistics', ['GET']]
-            ]]
+            ]],
         ]
         for app in bodySeed:
             appnodetmp = {}
@@ -237,7 +237,7 @@ statistics = Statistics()
 
 
 class JsonArray:
-    def __init__(self):
+    def __init__(self,filePath):
         self.jsonArray = []
 
     def get(self):
@@ -250,9 +250,9 @@ class JsonArray:
         self.jsonArray = []
 
 
-sticky = JsonArray()
-tabSync = JsonArray()
-toDoList = JsonArray()
+sticky = JsonArray("sticky.json")
+tabSync = JsonArray("tabSync.json")
+toDoList = JsonArray("toDoList.json")
 
 
 @app.route('/')
@@ -275,15 +275,19 @@ def sticky_get():
 
 @app.route('/v2/Sticky/add', methods=['GET', 'POST'])
 def sticky_add():
+    # TODO to add data trans
     newdata = 'null'
     statistics.rec('Sticky', 'addSticky', request.method)
     if request.method == 'GET':
         newdata = request.args.to_dict()
     elif request.method == 'POST':
         newdata = request.form.to_dict()
+    print(newdata)
+    print(request.form.get('title'))
+    print(request.method)
     if newdata != 'null':
         print('newdata != "null"')
-        if newdata != {}:
+        if newdata != {}:   
             print('newdata != dict')
             sticky.add(newdata)
     return newdata
@@ -357,7 +361,7 @@ def resetStatistics():
 
 @app.route('/config', methods=['GET'])
 def config():
-    return abort(404)
+    return render_template("config.html",title1="mySync",title2="config")
 
 
 @app.route('/test', methods=['GET'])
@@ -365,10 +369,17 @@ def test():
     # return render_template("temp copy.html",error_code="404",error_msg="NotFound")
     return abort(404)
 
-
 @app.route('/test/errorpage/<error_code>')
-def rest_error_page(error_code):
+def test_error_page(error_code):
     return abort(int(error_code))
+
+@app.route('/test/request')
+def test_request():
+    return render_template("post_page.html",title1="mySync",title2="testrequest")
+
+@app.route('/getip')
+def getip():
+    return request.remote_addr
 
 
 if __name__ == "__main__":
