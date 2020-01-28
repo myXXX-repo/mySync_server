@@ -1,0 +1,19 @@
+{% extends "template.html" %}
+
+{% block addition_css %}
+{% endblock %}
+
+{% block addition_js %}
+{% endblock %}
+
+{% block body %}
+
+<form action="/v2/Sticky/add" method="POST" role="form">
+    <legend>"/v2/Sticky/add"</legend>
+    <div class="form-group">
+        <input type="text" class="form-control" name="title" placeholder="Input field" value="this is title">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
