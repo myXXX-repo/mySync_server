@@ -4,7 +4,7 @@ from flask import url_for
 from flask import redirect
 from flask import request
 from flask import abort
-from os import path
+import os
 import json
 import time
 
@@ -141,7 +141,11 @@ def error_505(e):
 # re_define route
 
 class FileCtrl:  # ctrl file
-    def __init__(self, filePath):
+    def __init__(self, filePath,fileFolder='data'):
+        if os.path.exists(fileFolder):
+            pass
+        else:
+            os.mkdir(fileFolder)
         self.filePath = filePath
 
     def write_append(self, str):
@@ -154,7 +158,7 @@ class FileCtrl:  # ctrl file
 
     def read(self, AUTOCREATE=0):
         data_to_return = ""
-        if path.isfile(self.filePath):
+        if os.path.isfile(self.filePath):
             # if file exists
             # read file and return data
             with open(self.filePath, 'r') as filefd:
@@ -171,7 +175,7 @@ class FileCtrl:  # ctrl file
 class Statistics:
     def __init__(self):
         self.apis = []
-        self.fileCtrl = FileCtrl("Statistics.json")
+        self.fileCtrl = FileCtrl("data/Statistics.json")
         jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
         if jsonDatatmp != "":
             self.apis = json.loads(jsonDatatmp)
@@ -198,19 +202,19 @@ class Statistics:
             ]],
             ['Sticky', [
                 ['StickyIndex', ['GET']],
-                ['getSticky', ['GET', 'POST']],
+                ['getSticky', ['GET']],
                 ['addSticky', ['GET', 'POST']],
                 ['delSticky', ['GET', 'POST']],
             ]],
             ['tabSync', [
                 ['tabSyncIndex', ['GET']],
-                ['gettabSync', ['GET', 'POST']],
+                ['gettabSync', ['GET']],
                 ['addtabSync', ['GET', 'POST']],
                 ['deltabSync', ['GET', 'POST']],
             ]],
             ['toDoList', [
                 ['toDoListIndex', ['GET']],
-                ['gettoDoList', ['GET', 'POST']],
+                ['gettoDoList', ['GET']],
                 ['addtoDoList', ['GET', 'POST']],
                 ['deltoDoList', ['GET', 'POST']],
             ]],
@@ -237,7 +241,7 @@ statistics = Statistics()
 
 
 class JsonArray:
-    def __init__(self,filePath):
+    def __init__(self, filePath):
         self.jsonArray = []
 
     def get(self):
@@ -250,9 +254,9 @@ class JsonArray:
         self.jsonArray = []
 
 
-sticky = JsonArray("sticky.json")
-tabSync = JsonArray("tabSync.json")
-toDoList = JsonArray("toDoList.json")
+sticky = JsonArray("data/sticky.json")
+tabSync = JsonArray("data/tabSync.json")
+toDoList = JsonArray("data/toDoList.json")
 
 
 @app.route('/')
@@ -267,7 +271,7 @@ def sticky_index():
     return render_template('index_sticky.html', title1="Sticky", title2="index")
 
 
-@app.route('/v2/Sticky/get', methods=['GET', 'POST'])
+@app.route('/v2/Sticky/get', methods=['GET'])
 def sticky_get():
     statistics.rec('Sticky', 'getSticky', request.method)
     return json.dumps(sticky.get())
@@ -275,22 +279,22 @@ def sticky_get():
 
 @app.route('/v2/Sticky/add', methods=['GET', 'POST'])
 def sticky_add():
-    # TODO to add data trans
-    newdata = 'null'
     statistics.rec('Sticky', 'addSticky', request.method)
-    if request.method == 'GET':
-        newdata = request.args.to_dict()
-    elif request.method == 'POST':
-        newdata = request.form.to_dict()
-    print(newdata)
-    print(request.form.get('title'))
-    print(request.method)
-    if newdata != 'null':
-        print('newdata != "null"')
-        if newdata != {}:   
-            print('newdata != dict')
-            sticky.add(newdata)
-    return newdata
+    newdata = {}
+    if 'title' in request.values.to_dict():
+        if 'con' in request.values.to_dict():
+            if 'time' in request.values.to_dict():
+                if 'devName' in request.values.to_dict():
+                    if 'ip' in request.values.to_dict():
+                        newdata['title']=request.values.to_dict()['title']
+                        newdata['con']=request.values.to_dict()['con']
+                        newdata['time']=request.values.to_dict()['time']
+                        newdata['devName']=request.values.to_dict()['devName']
+                        newdata['ip']=request.values.to_dict()['ip']
+                        sticky.add(newdata)
+                        return "Success"
+    else:
+        return "error get wrong data"
 
 
 @app.route('/v2/Sticky/del', methods=['GET', 'POST'])
@@ -354,14 +358,20 @@ def getStatistics():
     return json.dumps(statistics.apis)
 
 
-@app.route('/statistics/reset', methods=['GET'])
-def resetStatistics():
-    pass
-
-
 @app.route('/config', methods=['GET'])
 def config():
-    return render_template("config.html",title1="mySync",title2="config")
+    return render_template("config.html", title1="mySync", title2="config")
+
+@app.route('/config/reset/<appname>', methods=['GET'])
+def config_reset(appname):
+    if appname == 'Sticky':
+        pass
+    if appname == 'tabSync':
+        pass
+    if appname == 'toDoList':
+        pass
+    if appname == 'statistics':
+        pass
 
 
 @app.route('/test', methods=['GET'])
@@ -369,13 +379,16 @@ def test():
     # return render_template("temp copy.html",error_code="404",error_msg="NotFound")
     return abort(404)
 
+
 @app.route('/test/errorpage/<error_code>')
 def test_error_page(error_code):
     return abort(int(error_code))
 
+
 @app.route('/test/request')
 def test_request():
-    return render_template("post_page.html",title1="mySync",title2="testrequest")
+    return render_template("test_request.html", title1="mySync", title2="testrequest")
+
 
 @app.route('/getip')
 def getip():
@@ -384,7 +397,7 @@ def getip():
 
 if __name__ == "__main__":
     app.run(
-        debug=True, 
+        debug=True,
         threaded=True,
         host="0.0.0.0"
-        )
+    )
