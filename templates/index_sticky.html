@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block addition_js %}
-<!-- <script src="http://wolfpc/recrepo/vue/vue-2.6.11-dev.js"></script> -->
+<script src="/static/index_sticky.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -13,33 +13,31 @@
       <div class="panel-heading">
             <h3 class="panel-title">Panel title</h3>
       </div>
-      <div class="panel-body">
-            <form action="" method="POST" role="form">
-                  <!-- <legend>Send new sticky</legend> -->
+      <div class="panel-body" id="input_panel">
+            <!-- <legend>Send new sticky</legend> -->
 
-                  <div class="form-group">
-                        <label>title</label>
-                        <input type="text" class="form-control" id="" placeholder="Input Title">
-                  </div>
-                  <div class="form-group">
-                        <label>con</label>
-                        <textarea class="form-control" rows="3" placeholder="Input Con"></textarea>
-                  </div>
-                  <div class="form-group">
-                        <label>time</label>
-                        <input type="text" class="form-control" placeholder="Input Time">
-                  </div>
-                  <div class="form-group">
-                        <label>devName</label>
-                        <input type="text" class="form-control" placeholder="Input DevName">
-                  </div>
-                  <div class="form-group">
-                        <label>send IP</label>
-                        <input type="text" class="form-control" placeholder="Input IP">
-                  </div>
-                  
-                  <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <div action="#" class="form-group">
+                  <label>title</label>
+                  <input type="text" class="form-control" placeholder="Input Title" v-model=title>
+            </div>
+            <div class="form-group">
+                  <label>con</label>
+                  <textarea class="form-control" rows="3" placeholder="Input Con" v-model=con></textarea>
+            </div>
+            <div class="form-group">
+                  <label>time</label>
+                  <input type="text" class="form-control" placeholder="Input Time" :value=time>
+            </div>
+            <div class="form-group">
+                  <label>devName</label>
+                  <input type="text" class="form-control" placeholder="Input DevName" v-model=devName>
+            </div>
+            <div class="form-group">
+                  <label>send IP</label>
+                  <input type="text" class="form-control" placeholder="Input IP" :value=ip>
+            </div>
+
+            <button type="submit" class="btn btn-primary" @Click=onBtnSubmitClick>Submit</button>
       </div>
 </div>
 
