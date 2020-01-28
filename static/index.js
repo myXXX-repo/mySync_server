@@ -30,7 +30,7 @@ new Vue({
                 show_list: toBool(localStorage.getItem('api_list_show_Sticky')),
                 list: [
                     { api_name: "index", method: "GET", routes: "/v2/Sticky", details: "have no upload data display index page" },
-                    { api_name: "get sticky", method: "GET√ POST", routes: "/v2/Sticky/get", details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines" },
+                    { api_name: "get sticky", method: "GET√", routes: "/v2/Sticky/get", details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines" },
                     { api_name: "add sticky", method: "GET POST√", routes: "/v2/Sticky/add", details: "send request:<br>GET: ?title=TITLE&con=CON for one line<br>POST: json string [['title','con'],['title','con']] for multilines<br>auth: header with AuthKey and DevName<br>return: 1 or 0" },
                     { api_name: "del sticky", method: "GET DEL POST", routes: "/v2/Sticky/del", details: "send request:<br>GET: ?id=1&id=2&id=3<br>post json array string: [1,2,3]<br>auth: header with AuthKey and DevName" },
                     { api_name: "data table", method: "Sticky", routes: "none", details: "id title con time devname" }
@@ -41,7 +41,7 @@ new Vue({
                 show_list: toBool(localStorage.getItem('api_list_show_tabSync')),
                 list: [
                     { api_name: "index", method: "GET", routes: "/v2/tabSync", details: "have no upload data display index page" },
-                    { api_name: "get tabSync", method: "GET√ POST", routes: "/v2/tabSync/get", details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines" },
+                    { api_name: "get tabSync", method: "GET√", routes: "/v2/tabSync/get", details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines" },
                     { api_name: "add tabSync", method: "GET POST√", routes: "/v2/tabSync/add", details: "send request:<br>GET: ?title=TITLE&con=CON for one line<br>POST: json string [['title','con'],['title','con']] for multilines<br>auth: header with AuthKey and DevName<br>return: 1 or 0" },
                     { api_name: "del tabSync", method: "GET DEL POST", routes: "/v2/tabSync/del", details: "send request:<br>GET: ?id=1&id=2&id=3<br>post json array string: [1,2,3]<br>auth: header with AuthKey and DevName" },
                 ]
@@ -50,7 +50,7 @@ new Vue({
                 title: "toDoList",
                 show_list: toBool(localStorage.getItem('api_list_show_toDoList')),
                 list: [
-                    { api_name: "get toDoList", method: "GET√ POST", routes: "/v2/toDoList/get", details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines" },
+                    { api_name: "get toDoList", method: "GET√", routes: "/v2/toDoList/get", details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines" },
                     { api_name: "add toDoList", method: "GET POST√", routes: "/v2/toDoList/add", details: "send request:<br>GET: ?title=TITLE&con=CON for one line<br>POST: json string [['title','con'],['title','con']] for multilines<br>auth: header with AuthKey and DevName<br>return: 1 or 0" },
                     { api_name: "del toDoList", method: "GET DEL POST", routes: "/v2/toDoList/del", details: "send request:<br>GET: ?id=1&id=2&id=3<br>post json array string: [1,2,3]<br>auth: header with AuthKey and DevName" },
                 ]
