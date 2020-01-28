@@ -1,3 +1,2 @@
 .venv
-Statistics.json
-templates/config.html
+data/*
