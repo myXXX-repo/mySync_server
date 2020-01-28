@@ -14,9 +14,7 @@
             <h3 class="panel-title">Panel title</h3>
       </div>
       <div class="panel-body" id="input_panel">
-            <!-- <legend>Send new sticky</legend> -->
-
-            <div action="#" class="form-group">
+            <div class="form-group">
                   <label>title</label>
                   <input type="text" class="form-control" placeholder="Input Title" v-model=title>
             </div>
@@ -40,8 +38,8 @@
             <button type="submit" class="btn btn-primary" @Click=onBtnSubmitClick>Submit</button>
       </div>
 </div>
-
-<div class="panel panel-default" style="display: inline-block;vertical-align: top;">
+{% raw %}
+<div class="panel panel-default" style="display: inline-block;vertical-align: top;" id="sticky_display_panel">
       <div class="panel-heading">
             <h3 class="panel-title">Panel title</h3>
       </div>
@@ -60,18 +58,18 @@
                         </tr>
                   </thead>
                   <tbody>
-                        <tr>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                        <tr v-for="(sticky,i) in sticky_list">
+                              <td>{{i+1}}</td>
+                              <td>{{sticky.title}}</td>
+                              <td>{{sticky.con}}</td>
+                              <td>{{sticky.time}}</td>
+                              <td>{{sticky.devName}}</td>
+                              <td>{{sticky.ip}}</td>
+                              <td><a>del</a></td>
                         </tr>
                   </tbody>
             </table>
       </div>
 </div>
-
+{% endraw %}
 {% endblock %}
