@@ -11,6 +11,7 @@ let toBool = function (str) {
 let init = function () {
     if (localStorage.getItem('inited') != 1) {
         localStorage.setItem('inited', 1);
+        localStorage.setItem('debug', 0);
         localStorage.setItem('api_list_show_Sticky', 'true');
         localStorage.setItem('api_list_show_tabSync', 'true');
         localStorage.setItem('api_list_show_toDoList', 'true');
