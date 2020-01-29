@@ -30,6 +30,7 @@ let input_panel = new Vue({
     methods: {
         onBtnSubmitClick() {
             localStorage.setItem('devName', this.devName);
+            this.time = getFormatedDateTime();
             let that = this;
             axios({
                 method: "post",
@@ -48,6 +49,21 @@ let input_panel = new Vue({
                 console.log(err);
             });
         },
+        delstickybyid(id) {
+            let that = this;
+            axios({
+                method: "get",
+                url: "/v2/Sticky/del",
+                params: {
+                    'id': id
+                }
+            }).then(function(response) {
+                console.log(response.data);
+                that.getData();
+            }).catch(function(e) {
+                console.log(e);
+            })
+        },
         getData() {
             that = this;
             axios({
@@ -58,7 +74,13 @@ let input_panel = new Vue({
             }).catch(function(err) {
                 console.log(err);
             });
-        }
+            axios({
+                method:'get',
+                url:"/getip"
+            }).then(function(response){
+                that.ip = response.data;
+            })
+        },
     },
     created() {
         this.time = getFormatedDateTime();

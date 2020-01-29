@@ -205,7 +205,7 @@ class Statistics:
                 ['StickyIndex', ['GET']],
                 ['getSticky', ['GET']],
                 ['addSticky', ['POST']],
-                ['delSticky', ['DELETE']],
+                ['delSticky', ['GET']],
             ]],
             ['statistics', [
                 ['statistics', ['GET']]
@@ -232,15 +232,25 @@ statistics = Statistics()
 class JsonArray:
     def __init__(self, filePath):
         self.jsonArray = []
+        self.fileCtrl = FileCtrl(filePath)
+        jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
+        if jsonDatatmp != "":
+            self.jsonArray = json.loads(jsonDatatmp)
 
     def get(self):
         return self.jsonArray
 
     def add(self, new):
         self.jsonArray.append(new)
+        self.fileCtrl.write_cover(json.dumps(self.jsonArray))
 
     def clear(self):
         self.jsonArray = []
+        self.fileCtrl.write_cover(json.dumps(self.jsonArray))
+    
+    def delbyId(self,id):
+        self.jsonArray.pop(int(id))
+        self.fileCtrl.write_cover(json.dumps(self.jsonArray))
 
 
 sticky = JsonArray("data/sticky.json")
@@ -285,10 +295,12 @@ def sticky_add():
         return "error get wrong data"
 
 
-@app.route('/v2/Sticky/del', methods=['DELETE'])
+@app.route('/v2/Sticky/del', methods=['GET'])
 def sticky_del():
     statistics.rec('Sticky', 'delSticky', request.method)
-    return abort(404)
+    id_todel = request.values.to_dict()['id']
+    sticky.delbyId(id_todel)
+    return 'del done'
 
 
 @app.route('/statistics', methods=['GET'])
@@ -316,7 +328,6 @@ def config_reset(appname):
 
 @app.route('/test', methods=['GET'])
 def test():
-    # return render_template("temp copy.html",error_code="404",error_msg="NotFound")
     return abort(404)
 
 
