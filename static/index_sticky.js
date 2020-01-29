@@ -32,7 +32,7 @@ let input_panel = new Vue({
             localStorage.setItem('devName', this.devName);
             let that = this;
             axios({
-                method: "put",
+                method: "post",
                 url: "/v2/Sticky/add",
                 params: {
                     title: that.title,
