@@ -1,11 +1,11 @@
-let ensure_2 = function(num) {
+let ensure_2 = function (num) {
     if (num < 10) {
         num = "0" + num;
     }
     return num;
 }
 
-let getFormatedDateTime = function() {
+let getFormatedDateTime = function () {
     var date = new Date();
     var year = date.getFullYear();
     var month = ensure_2(date.getMonth() + 1);
@@ -42,13 +42,47 @@ let input_panel = new Vue({
                     devName: that.devName,
                     ip: that.ip
                 }
-            }).then(function(response) {
+            }).then(function (response) {
                 console.log(response.data);
                 that.getData();
-            }).catch(function(err) {
+            }).catch(function (err) {
                 console.log(err);
             });
         },
+        onBtnResetClick() {
+            let that = this;
+            this.title = "Default Title";
+            this.con = "";
+            this.time = getFormatedDateTime();
+            this.devName = localStorage.getItem('devName');
+            axios({
+                method: 'get',
+                url: "/getip"
+            }).then(function (response) {
+                that.ip = response.data;
+                that.onBtnResetClick();
+            });
+        },
+        onBtnClearClick() {
+            let that = this;
+            axios({
+                method: "get",
+                url: "/v2/Sticky/clear"
+            }).then(function (response) {
+                that.getData();
+            }).catch(function (err) {
+                console.log(err);
+            });
+        },
+        // onCtrlKeyUp() {
+        //     let that = this;
+        //     document.onkeydown = function (e) {
+        //         // let keyNum=window.event ? e.keyCode : e.which;
+        //         if ((keyNum = window.event ? e.keyCode : e.which) == 13) {
+        //             that.onBtnSubmitClick();
+        //         }
+        //     }
+        // },
         delstickybyid(id) {
             let that = this;
             axios({
@@ -57,29 +91,29 @@ let input_panel = new Vue({
                 params: {
                     'id': id
                 }
-            }).then(function(response) {
+            }).then(function (response) {
                 console.log(response.data);
                 that.getData();
-            }).catch(function(e) {
+            }).catch(function (e) {
                 console.log(e);
-            })
+            });
         },
         getData() {
-            that = this;
+            let that = this;
             axios({
                 method: 'get',
                 url: "/v2/Sticky/get"
-            }).then(function(response) {
+            }).then(function (response) {
                 that.sticky_list = response.data;
-            }).catch(function(err) {
+            }).catch(function (err) {
                 console.log(err);
             });
             axios({
-                method:'get',
-                url:"/getip"
-            }).then(function(response){
+                method: 'get',
+                url: "/getip"
+            }).then(function (response) {
                 that.ip = response.data;
-            })
+            });
         },
     },
     created() {
@@ -89,5 +123,6 @@ let input_panel = new Vue({
     },
     mounted() {
         this.getData();
+        $('#con').focus();
     }
 });
