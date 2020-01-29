@@ -1,6 +1,11 @@
 {% extends "template.html" %}
 
 {% block addition_css %}
+<style>
+      .btn-danger{
+            margin:15px;
+      }
+</style>
 {% endblock %}
 
 {% block addition_js %}
@@ -11,7 +16,7 @@
 <div id="sticky_panel">
       <div class="panel panel-default" style="width:390px;display: inline-block;vertical-align: top;">
             <div class="panel-heading">
-                  <h3 class="panel-title">Panel title</h3>
+                  <h3 class="panel-title">Input panel</h3>
             </div>
             <div class="panel-body">
                   <div class="form-group">
@@ -20,7 +25,7 @@
                   </div>
                   <div class="form-group">
                         <label>con</label>
-                        <textarea class="form-control" rows="3" placeholder="Input Con" v-model=con></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Input Con" v-model=con id="con"></textarea>
                   </div>
                   <div class="form-group">
                         <label>time</label>
@@ -36,13 +41,19 @@
                   </div>
 
                   <button type="submit" class="btn btn-primary" @Click=onBtnSubmitClick>Submit</button>
+                  
+                  <button type="button" class="btn btn-warning" @click=onBtnResetClick>reset</button>
+                  
             </div>
       </div>
       {% raw %}
       <div class="panel panel-default" style="display: inline-block;vertical-align: top;">
             <div class="panel-heading">
-                  <h3 class="panel-title">Panel title</h3>
+                  <h3 class="panel-title">Sticky</h3>
             </div>
+            
+            <button type="button" class="btn btn-danger" @click=onBtnClearClick>clear</button>
+            
             <div class="panel-body">
 
                   <table class="table table-bordered table-hover">
