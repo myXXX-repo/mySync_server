@@ -7,6 +7,7 @@ from flask import abort
 import os
 import json
 import time
+import argparse
 
 app = Flask(__name__)
 
@@ -141,7 +142,7 @@ def error_505(e):
 # re_define route
 
 class FileCtrl:  # ctrl file
-    def __init__(self, filePath,fileFolder='data'):
+    def __init__(self, filePath, fileFolder='data'):
         if os.path.exists(fileFolder):
             pass
         else:
@@ -203,21 +204,21 @@ class Statistics:
             ['Sticky', [
                 ['StickyIndex', ['GET']],
                 ['getSticky', ['GET']],
-                ['addSticky', ['GET', 'POST']],
-                ['delSticky', ['GET', 'POST']],
+                ['addSticky', ['PUT']],
+                ['delSticky', ['DELETE']],
             ]],
-            ['tabSync', [
-                ['tabSyncIndex', ['GET']],
-                ['gettabSync', ['GET']],
-                ['addtabSync', ['GET', 'POST']],
-                ['deltabSync', ['GET', 'POST']],
-            ]],
-            ['toDoList', [
-                ['toDoListIndex', ['GET']],
-                ['gettoDoList', ['GET']],
-                ['addtoDoList', ['GET', 'POST']],
-                ['deltoDoList', ['GET', 'POST']],
-            ]],
+            # ['tabSync', [
+            #     ['tabSyncIndex', ['GET']],
+            #     ['gettabSync', ['GET']],
+            #     ['addtabSync', ['GET', 'POST']],
+            #     ['deltabSync', ['GET', 'POST']],
+            # ]],
+            # ['toDoList', [
+            #     ['toDoListIndex', ['GET']],
+            #     ['gettoDoList', ['GET']],
+            #     ['addtoDoList', ['GET', 'POST']],
+            #     ['deltoDoList', ['GET', 'POST']],
+            # ]],
             ['statistics', [
                 ['statistics', ['GET']]
             ]],
@@ -255,8 +256,8 @@ class JsonArray:
 
 
 sticky = JsonArray("data/sticky.json")
-tabSync = JsonArray("data/tabSync.json")
-toDoList = JsonArray("data/toDoList.json")
+# tabSync = JsonArray("data/tabSync.json")
+# toDoList = JsonArray("data/toDoList.json")
 
 
 @app.route('/')
@@ -277,7 +278,7 @@ def sticky_get():
     return json.dumps(sticky.get())
 
 
-@app.route('/v2/Sticky/add', methods=['GET', 'POST'])
+@app.route('/v2/Sticky/add', methods=['PUT'])
 def sticky_add():
     statistics.rec('Sticky', 'addSticky', request.method)
     newdata = {}
@@ -286,70 +287,71 @@ def sticky_add():
             if 'time' in request.values.to_dict():
                 if 'devName' in request.values.to_dict():
                     if 'ip' in request.values.to_dict():
-                        newdata['title']=request.values.to_dict()['title']
-                        newdata['con']=request.values.to_dict()['con']
-                        newdata['time']=request.values.to_dict()['time']
-                        newdata['devName']=request.values.to_dict()['devName']
-                        newdata['ip']=request.values.to_dict()['ip']
+                        newdata['title'] = request.values.to_dict()['title']
+                        newdata['con'] = request.values.to_dict()['con']
+                        newdata['time'] = request.values.to_dict()['time']
+                        newdata['devName'] = request.values.to_dict()[
+                            'devName']
+                        newdata['ip'] = request.values.to_dict()['ip']
                         sticky.add(newdata)
                         return "Success"
     else:
         return "error get wrong data"
 
 
-@app.route('/v2/Sticky/del', methods=['GET', 'POST'])
+@app.route('/v2/Sticky/del', methods=['DELETE'])
 def sticky_del():
     statistics.rec('Sticky', 'delSticky', request.method)
     return abort(404)
 
-# app_tabSync
-@app.route('/v2/tabSync', methods=['GET'])
-def tabSync_index():
-    statistics.rec('tabSync', 'tabSyncIndex', request.method)
-    return abort(404)
+# # app_tabSync
+# @app.route('/v2/tabSync', methods=['GET'])
+# def tabSync_index():
+#     statistics.rec('tabSync', 'tabSyncIndex', request.method)
+#     return abort(404)
 
 
-@app.route('/v2/tabSync/get', methods=['GET', 'POST'])
-def tabSync_get():
-    statistics.rec('tabSync', 'gettabSync', request.method)
-    return abort(404)
+# @app.route('/v2/tabSync/get', methods=['GET', 'POST'])
+# def tabSync_get():
+#     statistics.rec('tabSync', 'gettabSync', request.method)
+#     return abort(404)
 
 
-@app.route('/v2/tabSync/add', methods=['GET', 'POST'])
-def tabSync_add():
-    statistics.rec('tabSync', 'addtabSync', request.method)
-    # sticky.add({"title":"thisistitle","con":"this is con"})
-    return abort(404)
+# @app.route('/v2/tabSync/add', methods=['GET', 'POST'])
+# def tabSync_add():
+#     statistics.rec('tabSync', 'addtabSync', request.method)
+#     # sticky.add({"title":"thisistitle","con":"this is con"})
+#     return abort(404)
 
 
-@app.route('/v2/tabSync/del', methods=['GET', 'POST'])
-def tabSync_del():
-    statistics.rec('tabSync', 'deltabSync', request.method)
-    return abort(404)
+# @app.route('/v2/tabSync/del', methods=['GET', 'POST'])
+# def tabSync_del():
+#     statistics.rec('tabSync', 'deltabSync', request.method)
+#     return abort(404)
 
-# app_toDoList
-@app.route('/v2/toDoList', methods=['GET'])
-def toDoList_index():
-    statistics.rec('toDoList', 'toDoListIndex', request.method)
-    return abort(404)
-
-
-@app.route('/v2/toDoList/get', methods=['GET', 'POST'])
-def toDoList_get():
-    statistics.rec('toDoList', 'gettoDoList', request.method)
-    return abort(404)
+# # app_toDoList
+# @app.route('/v2/toDoList', methods=['GET'])
+# def toDoList_index():
+#     statistics.rec('toDoList', 'toDoListIndex', request.method)
+#     return abort(404)
 
 
-@app.route('/v2/toDoList/add', methods=['GET', 'POST'])
-def toDoList_add():
-    statistics.rec('toDoList', 'addtoDoList', request.method)
-    return abort(404)
+# @app.route('/v2/toDoList/get', methods=['GET', 'POST'])
+# def toDoList_get():
+#     statistics.rec('toDoList', 'gettoDoList', request.method)
+#     return abort(404)
 
 
-@app.route('/v2/toDoList/del', methods=['GET', 'POST'])
-def toDoList_del():
-    statistics.rec('toDoList', 'deltoDoList', request.method)
-    return abort(404)
+# @app.route('/v2/toDoList/add', methods=['GET', 'POST'])
+# def toDoList_add():
+#     statistics.rec('toDoList', 'addtoDoList', request.method)
+#     return abort(404)
+
+
+# @app.route('/v2/toDoList/del', methods=['GET', 'POST'])
+# def toDoList_del():
+#     statistics.rec('toDoList', 'deltoDoList', request.method)
+#     return abort(404)
 
 
 @app.route('/statistics', methods=['GET'])
@@ -361,6 +363,7 @@ def getStatistics():
 @app.route('/config', methods=['GET'])
 def config():
     return render_template("config.html", title1="mySync", title2="config")
+
 
 @app.route('/config/reset/<appname>', methods=['GET'])
 def config_reset(appname):
@@ -395,9 +398,21 @@ def getip():
     return request.remote_addr
 
 
+parser = argparse.ArgumentParser(
+    # description='Test for argparse'
+)
+parser.add_argument('-l', '--listen', default="0.0.0.0")
+parser.add_argument('-p', '--port', default=5000)
+parser.add_argument('-d', '--debugOn', default=False)
+args = parser.parse_args()
+
 if __name__ == "__main__":
-    app.run(
-        debug=True,
-        threaded=True,
-        host="0.0.0.0"
-    )
+    try:
+        app.run(
+            host = args.listen,
+            debug=args.debugOn,
+            port= args.port,
+            threaded=True
+        )
+    except Exception as e:
+        print(e)
