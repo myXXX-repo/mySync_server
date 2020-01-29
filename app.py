@@ -204,21 +204,9 @@ class Statistics:
             ['Sticky', [
                 ['StickyIndex', ['GET']],
                 ['getSticky', ['GET']],
-                ['addSticky', ['PUT']],
+                ['addSticky', ['POST']],
                 ['delSticky', ['DELETE']],
             ]],
-            # ['tabSync', [
-            #     ['tabSyncIndex', ['GET']],
-            #     ['gettabSync', ['GET']],
-            #     ['addtabSync', ['GET', 'POST']],
-            #     ['deltabSync', ['GET', 'POST']],
-            # ]],
-            # ['toDoList', [
-            #     ['toDoListIndex', ['GET']],
-            #     ['gettoDoList', ['GET']],
-            #     ['addtoDoList', ['GET', 'POST']],
-            #     ['deltoDoList', ['GET', 'POST']],
-            # ]],
             ['statistics', [
                 ['statistics', ['GET']]
             ]],
@@ -256,8 +244,6 @@ class JsonArray:
 
 
 sticky = JsonArray("data/sticky.json")
-# tabSync = JsonArray("data/tabSync.json")
-# toDoList = JsonArray("data/toDoList.json")
 
 
 @app.route('/')
@@ -278,7 +264,7 @@ def sticky_get():
     return json.dumps(sticky.get())
 
 
-@app.route('/v2/Sticky/add', methods=['PUT'])
+@app.route('/v2/Sticky/add', methods=['POST'])
 def sticky_add():
     statistics.rec('Sticky', 'addSticky', request.method)
     newdata = {}
@@ -303,55 +289,6 @@ def sticky_add():
 def sticky_del():
     statistics.rec('Sticky', 'delSticky', request.method)
     return abort(404)
-
-# # app_tabSync
-# @app.route('/v2/tabSync', methods=['GET'])
-# def tabSync_index():
-#     statistics.rec('tabSync', 'tabSyncIndex', request.method)
-#     return abort(404)
-
-
-# @app.route('/v2/tabSync/get', methods=['GET', 'POST'])
-# def tabSync_get():
-#     statistics.rec('tabSync', 'gettabSync', request.method)
-#     return abort(404)
-
-
-# @app.route('/v2/tabSync/add', methods=['GET', 'POST'])
-# def tabSync_add():
-#     statistics.rec('tabSync', 'addtabSync', request.method)
-#     # sticky.add({"title":"thisistitle","con":"this is con"})
-#     return abort(404)
-
-
-# @app.route('/v2/tabSync/del', methods=['GET', 'POST'])
-# def tabSync_del():
-#     statistics.rec('tabSync', 'deltabSync', request.method)
-#     return abort(404)
-
-# # app_toDoList
-# @app.route('/v2/toDoList', methods=['GET'])
-# def toDoList_index():
-#     statistics.rec('toDoList', 'toDoListIndex', request.method)
-#     return abort(404)
-
-
-# @app.route('/v2/toDoList/get', methods=['GET', 'POST'])
-# def toDoList_get():
-#     statistics.rec('toDoList', 'gettoDoList', request.method)
-#     return abort(404)
-
-
-# @app.route('/v2/toDoList/add', methods=['GET', 'POST'])
-# def toDoList_add():
-#     statistics.rec('toDoList', 'addtoDoList', request.method)
-#     return abort(404)
-
-
-# @app.route('/v2/toDoList/del', methods=['GET', 'POST'])
-# def toDoList_del():
-#     statistics.rec('toDoList', 'deltoDoList', request.method)
-#     return abort(404)
 
 
 @app.route('/statistics', methods=['GET'])
