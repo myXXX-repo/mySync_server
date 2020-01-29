@@ -24,21 +24,22 @@ let getFormatedDateTime = function () {
     return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
 }
 
-new Vue({
-    el: "#input_panel",
+let input_panel = new Vue({
+    el: "#sticky_panel",
     data: {
         title: "Default Title",
         con: "",
         time: "",
         devName: "",
-        ip: ""
+        ip: "",
+        sticky_list: []
     },
     methods: {
         onBtnSubmitClick() {
             localStorage.setItem('devName', this.devName);
             let that = this;
             axios({
-                method: "post",
+                method: "put",
                 url: "/v2/Sticky/add",
                 params: {
                     title: that.title,
@@ -49,41 +50,29 @@ new Vue({
                 }
             }).then(function (response) {
                 console.log(response.data);
-            }).catch(function (e) {
+                that.getData();
+            }).catch(function (err) {
+                console.log(err);
+            });
+        },
+        getData() {
+            that = this;
+            axios({
+                method: 'get',
+                url: "/v2/Sticky/get"
+            }).then(function (response) {
+                that.sticky_list = response.data;
+            }).catch(function (err) {
                 console.log(err);
             });
         }
     },
     created() {
-        let that = this;
         this.time = getFormatedDateTime();
         this.devName = localStorage.getItem('devName');
-        axios.get("/getip").then(function (request) {
-            that.ip = request.data;
-            console.log(request.data);
-        }).catch(function (e) {
-            console.log(e);
-        })
-    },
-});
-
-new Vue({
-    el: "#sticky_display_panel",
-    data: {
-        sticky_list: ""
-    },
-    methods: {
-
+        this.getData();
     },
     mounted() {
-        that = this;
-        axios({
-            method: 'get',
-            url: "/v2/Sticky/get"
-        }).then(function (response) {
-            that.sticky_list = response.data;
-        }).catch(function (err) {
-            console.log(err);
-        });
+        this.getData();
     }
-})
+});
