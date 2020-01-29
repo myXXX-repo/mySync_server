@@ -35,7 +35,7 @@ new Vue({
                     },
                     {
                         api_name: "get sticky",
-                        method: "GET√",
+                        method: "GET",
                         routes: "/v2/Sticky/get",
                         details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines"
                     },
@@ -47,9 +47,15 @@ new Vue({
                     },
                     {
                         api_name: "del sticky",
-                        method: "DELETE",
+                        method: "GET",
                         routes: "/v2/Sticky/del",
                         details: "send request:<br>GET: ?id=1&id=2&id=3<br>post json array string: [1,2,3]<br>auth: header with AuthKey and DevName"
+                    },
+                    {
+                        api_name:"clear sticky",
+                        method: "GET",
+                        routes: "/v2/Sticky/clear",
+                        details:""
                     }
                 ]
             },
