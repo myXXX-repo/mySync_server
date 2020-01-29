@@ -206,6 +206,7 @@ class Statistics:
                 ['getSticky', ['GET']],
                 ['addSticky', ['POST']],
                 ['delSticky', ['GET']],
+                ['clearSticky', ['GET']],
             ]],
             ['statistics', [
                 ['statistics', ['GET']]
@@ -302,6 +303,11 @@ def sticky_del():
     sticky.delbyId(id_todel)
     return 'del done'
 
+@app.route('/v2/Sticky/clear',methods=['GET'])
+def sticky_clear():
+    statistics.rec('Sticky', 'clearSticky', request.method)
+    sticky.clear()
+    return 'clear done'
 
 @app.route('/statistics', methods=['GET'])
 def getStatistics():
