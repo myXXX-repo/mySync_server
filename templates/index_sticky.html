@@ -8,67 +8,68 @@
 {% endblock %}
 
 {% block body %}
+<div id="sticky_panel">
+      <div class="panel panel-default" style="width:390px;display: inline-block;vertical-align: top;">
+            <div class="panel-heading">
+                  <h3 class="panel-title">Panel title</h3>
+            </div>
+            <div class="panel-body">
+                  <div class="form-group">
+                        <label>title</label>
+                        <input type="text" class="form-control" placeholder="Input Title" v-model=title>
+                  </div>
+                  <div class="form-group">
+                        <label>con</label>
+                        <textarea class="form-control" rows="3" placeholder="Input Con" v-model=con></textarea>
+                  </div>
+                  <div class="form-group">
+                        <label>time</label>
+                        <input type="text" class="form-control" placeholder="Input Time" :value=time>
+                  </div>
+                  <div class="form-group">
+                        <label>devName</label>
+                        <input type="text" class="form-control" placeholder="Input DevName" v-model=devName>
+                  </div>
+                  <div class="form-group">
+                        <label>send IP</label>
+                        <input type="text" class="form-control" placeholder="Input IP" :value=ip>
+                  </div>
 
-<div class="panel panel-default" style="width:390px;display: inline-block;vertical-align: top;">
-      <div class="panel-heading">
-            <h3 class="panel-title">Panel title</h3>
+                  <button type="submit" class="btn btn-primary" @Click=onBtnSubmitClick>Submit</button>
+            </div>
       </div>
-      <div class="panel-body" id="input_panel">
-            <div class="form-group">
-                  <label>title</label>
-                  <input type="text" class="form-control" placeholder="Input Title" v-model=title>
+      {% raw %}
+      <div class="panel panel-default" style="display: inline-block;vertical-align: top;">
+            <div class="panel-heading">
+                  <h3 class="panel-title">Panel title</h3>
             </div>
-            <div class="form-group">
-                  <label>con</label>
-                  <textarea class="form-control" rows="3" placeholder="Input Con" v-model=con></textarea>
-            </div>
-            <div class="form-group">
-                  <label>time</label>
-                  <input type="text" class="form-control" placeholder="Input Time" :value=time>
-            </div>
-            <div class="form-group">
-                  <label>devName</label>
-                  <input type="text" class="form-control" placeholder="Input DevName" v-model=devName>
-            </div>
-            <div class="form-group">
-                  <label>send IP</label>
-                  <input type="text" class="form-control" placeholder="Input IP" :value=ip>
-            </div>
+            <div class="panel-body">
 
-            <button type="submit" class="btn btn-primary" @Click=onBtnSubmitClick>Submit</button>
-      </div>
-</div>
-{% raw %}
-<div class="panel panel-default" style="display: inline-block;vertical-align: top;" id="sticky_display_panel">
-      <div class="panel-heading">
-            <h3 class="panel-title">Panel title</h3>
-      </div>
-      <div class="panel-body">
-
-            <table class="table table-bordered table-hover">
-                  <thead>
-                        <tr>
-                              <th>ID</th>
-                              <th>Title</th>
-                              <th>Con</th>
-                              <th>Time</th>
-                              <th>devName</th>
-                              <th>send IP</th>
-                              <th>Operate</th>
-                        </tr>
-                  </thead>
-                  <tbody>
-                        <tr v-for="(sticky,i) in sticky_list">
-                              <td>{{i+1}}</td>
-                              <td>{{sticky.title}}</td>
-                              <td>{{sticky.con}}</td>
-                              <td>{{sticky.time}}</td>
-                              <td>{{sticky.devName}}</td>
-                              <td>{{sticky.ip}}</td>
-                              <td><a>del</a></td>
-                        </tr>
-                  </tbody>
-            </table>
+                  <table class="table table-bordered table-hover">
+                        <thead>
+                              <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Con</th>
+                                    <th>Time</th>
+                                    <th>devName</th>
+                                    <th>send IP</th>
+                                    <th>Operate</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <tr v-for="(sticky,i) in sticky_list">
+                                    <td>{{i+1}}</td>
+                                    <td>{{sticky.title}}</td>
+                                    <td>{{sticky.con}}</td>
+                                    <td>{{sticky.time}}</td>
+                                    <td>{{sticky.devName}}</td>
+                                    <td>{{sticky.ip}}</td>
+                                    <td><a>del</a></td>
+                              </tr>
+                        </tbody>
+                  </table>
+            </div>
       </div>
 </div>
 {% endraw %}
