@@ -1,26 +1,18 @@
+let ensure_2 = function(num){
+    if(num<10){
+        num = "0"+num;
+    }
+    return num;
+}
+
 let getFormatedDateTime = function () {
     var date = new Date();
     var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    if (month < 10) {
-        month = "0" + month;
-    }
-    var day = date.getDate();
-    if (day < 10) {
-        day = "0" + day;
-    }
-    var hour = date.getHours();
-    if (hour < 10) {
-        hour = "0" + hour;
-    }
-    var min = date.getMinutes();
-    if (min < 10) {
-        min = "0" + min;
-    }
-    var sec = date.getSeconds();
-    if (sec < 10) {
-        sec = "0" + sec;
-    }
+    var month = ensure_2(date.getMonth() + 1);
+    var day = ensure_2(date.getDate());
+    var hour = ensure_2(date.getHours());
+    var min = ensure_2(date.getMinutes());
+    var sec = ensure_2(date.getSeconds());
     return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
 }
 
