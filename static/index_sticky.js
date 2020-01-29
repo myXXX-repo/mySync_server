@@ -1,11 +1,11 @@
-let ensure_2 = function(num){
-    if(num<10){
-        num = "0"+num;
+let ensure_2 = function(num) {
+    if (num < 10) {
+        num = "0" + num;
     }
     return num;
 }
 
-let getFormatedDateTime = function () {
+let getFormatedDateTime = function() {
     var date = new Date();
     var year = date.getFullYear();
     var month = ensure_2(date.getMonth() + 1);
@@ -15,6 +15,7 @@ let getFormatedDateTime = function () {
     var sec = ensure_2(date.getSeconds());
     return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
 }
+
 
 let input_panel = new Vue({
     el: "#sticky_panel",
@@ -40,10 +41,10 @@ let input_panel = new Vue({
                     devName: that.devName,
                     ip: that.ip
                 }
-            }).then(function (response) {
+            }).then(function(response) {
                 console.log(response.data);
                 that.getData();
-            }).catch(function (err) {
+            }).catch(function(err) {
                 console.log(err);
             });
         },
@@ -52,9 +53,9 @@ let input_panel = new Vue({
             axios({
                 method: 'get',
                 url: "/v2/Sticky/get"
-            }).then(function (response) {
+            }).then(function(response) {
                 that.sticky_list = response.data;
-            }).catch(function (err) {
+            }).catch(function(err) {
                 console.log(err);
             });
         }
