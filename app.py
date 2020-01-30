@@ -230,31 +230,34 @@ class Statistics:
 statistics = Statistics()
 
 
-class JsonArray:
+class DataArray:
     def __init__(self, filePath):
-        self.jsonArray = []
+        self.dataArray = []
         self.fileCtrl = FileCtrl(filePath)
         jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
         if jsonDatatmp != "":
-            self.jsonArray = json.loads(jsonDatatmp)
+            self.dataArray = json.loads(jsonDatatmp)
 
     def get(self):
-        return self.jsonArray
+        return self.dataArray
+
+    def getbyId(self, id):
+        return self.dataArray[id]
 
     def add(self, new):
-        self.jsonArray.append(new)
-        self.fileCtrl.write_cover(json.dumps(self.jsonArray))
+        self.dataArray.append(new)
+        self.fileCtrl.write_cover(json.dumps(self.dataArray))
 
     def clear(self):
-        self.jsonArray = []
-        self.fileCtrl.write_cover(json.dumps(self.jsonArray))
-    
-    def delbyId(self,id):
-        self.jsonArray.pop(int(id))
-        self.fileCtrl.write_cover(json.dumps(self.jsonArray))
+        self.dataArray = []
+        self.fileCtrl.write_cover(json.dumps(self.dataArray))
+
+    def delbyId(self, id):
+        self.dataArray.pop(int(id))
+        self.fileCtrl.write_cover(json.dumps(self.dataArray))
 
 
-sticky = JsonArray("data/sticky.json")
+sticky = DataArray("data/sticky.json")
 
 
 @app.route('/')
@@ -262,7 +265,95 @@ def index():
     statistics.rec('Index', 'IndexPage', request.method)
     return render_template('index.html', title1="mySync", title2="index")
 
+
+@app.route('/t', methods=['GET', 'post', 'PUT', 'PATH'])
+def index_t():
+    return request.args.to_dict()
+
 # app_sticky
+
+
+@app.route('/v<float:version>/<app>', methods=['GET', 'POST'])
+def get_post_res(version, app):
+    if version == 2.1:  # post data with form
+        if app == 'Sticky':
+            access_method = request.method
+            if access_method == 'GET':  # 获取资源
+                data_to_return = []
+                request_data = request.args.to_dict()  # 用于保存获取数据的过滤
+                if 'limit' in request_data:
+                    sticky_data = sticky.dataArray
+                    data_to_return = sticky_data[0:int(request_data['limit'])]
+                else:
+                    data_to_return = sticky.dataArray
+
+                return json.dumps(data_to_return)
+
+            elif access_method == 'POST':  # 添加资源
+                request_data = request.values.to_dict()
+                newdata = {}
+                if 'title' in request_data:
+                    if 'con' in request_data:
+                        if 'time' in request_data:
+                            if 'devName' in request_data:
+                                if 'ip' in request_data:
+                                    newdata['title'] = request_data['title']
+                                    newdata['con'] = request_data['con']
+                                    newdata['time'] = request_data['time']
+                                    newdata['devName'] = request_data['devName']
+                                    newdata['ip'] = request_data['ip']
+                                    sticky.add(newdata)
+                                    return "Success"
+                else:
+                    return "error get wrong data"
+            else:
+                abort(405)  # method not allowed
+
+        elif app == 'tabSync':
+            pass
+
+        else:
+            abort(404)
+
+    else:
+        abort(404)
+
+
+@app.route('/v<float:version>/<app>/<int:resid>', methods=['GET', 'PUT', 'PATH', 'DELETE'])
+def get_put_path_res_by_id(version, app, resid):
+    if version == 2.1:
+        if app == 'Sticky':
+            if resid not in range(len(sticky.dataArray)):
+                abort(404)
+            access_method = request.method
+            if access_method == 'GET':  # 获取指定的一条资源 by id
+                return json.dumps(sticky.dataArray)
+
+            elif access_method == 'PUT':  # 发送一条完整数据覆盖指定资源
+                request_data = request_data.args.to_dict()
+                # TODO add function to check data
+                sticky.dataArray[resid].update(request_data)
+                return 'cover success'
+
+            elif access_method == 'PATH':  # 发送一条增量数据更新资源
+                request_data = request_data.args.to_dict()
+                # TODO add function to check data
+                sticky.dataArray[resid].update(request_data)
+                return 'update success'
+
+            elif access_method == 'DELETE':  # 删除一条数据
+                sticky.delbyId(resid)
+                return 'deleted success'
+            else:  # end of method judge
+                abort(405)
+
+        else:  # end of app judge
+            abort(404)
+
+    else:  # end of version judge
+        abort(404)
+
+
 @app.route('/v2/Sticky', methods=['GET'])
 def sticky_index():
     statistics.rec('Sticky', 'StickyIndex', request.method)
@@ -272,7 +363,7 @@ def sticky_index():
 @app.route('/v2/Sticky/get', methods=['GET'])
 def sticky_get():
     statistics.rec('Sticky', 'getSticky', request.method)
-    return json.dumps(sticky.get())
+    return json.dumps(sticky.dataArray)
 
 
 @app.route('/v2/Sticky/add', methods=['POST'])
@@ -303,11 +394,13 @@ def sticky_del():
     sticky.delbyId(id_todel)
     return 'del done'
 
-@app.route('/v2/Sticky/clear',methods=['GET'])
+
+@app.route('/v2/Sticky/clear', methods=['GET'])
 def sticky_clear():
     statistics.rec('Sticky', 'clearSticky', request.method)
     sticky.clear()
     return 'clear done'
+
 
 @app.route('/statistics', methods=['GET'])
 def getStatistics():
@@ -363,9 +456,9 @@ args = parser.parse_args()
 if __name__ == "__main__":
     try:
         app.run(
-            host = args.listen,
+            host=args.listen,
             debug=args.debugOn,
-            port= args.port,
+            port=args.port,
             threaded=True
         )
     except Exception as e:
