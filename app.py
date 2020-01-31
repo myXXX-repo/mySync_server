@@ -176,55 +176,14 @@ class FileCtrl:  # ctrl file
 class Statistics:
     def __init__(self):
         self.apis = []
+
         self.fileCtrl = FileCtrl("data/Statistics.json")
         jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
         if jsonDatatmp != "":
             self.apis = json.loads(jsonDatatmp)
         else:
-            self.createDataBody()
-
-    def rec(self, appname, apiname, method):
-        for app in self.apis:
-            if app["appname"] == appname:
-                for api in app["apis"]:
-                    if api['apiname'] == apiname:
-                        if api['method'] == method:
-                            api['NumOfCall'] += 1
-                            api['LastCallTime'] = str(time.strftime(
-                                '%Y-%m-%d %H:%M:%S', time.localtime()))
-                            self.fileCtrl.write_cover(json.dumps(self.apis))
-                            return
-        return
-
-    def createDataBody(self):
-        bodySeed = [
-            ['Index', [
-                ['IndexPage', ['GET']]
-            ]],
-            ['Sticky', [
-                ['StickyIndex', ['GET']],
-                ['getSticky', ['GET']],
-                ['addSticky', ['POST']],
-                ['delSticky', ['GET']],
-                ['clearSticky', ['GET']],
-            ]],
-            ['statistics', [
-                ['statistics', ['GET']]
-            ]],
-        ]
-        for app in bodySeed:
-            appnodetmp = {}
-            appnodetmp["appname"] = app[0]
-            appnodetmp["apis"] = []
-            for api in app[1]:
-                for method in api[1]:
-                    apinodetmp = {}
-                    apinodetmp["apiname"] = api[0]
-                    apinodetmp["method"] = method
-                    apinodetmp["NumOfCall"] = 0
-                    apinodetmp["LastCallTime"] = "N/A"
-                    appnodetmp["apis"].append(apinodetmp)
-            self.apis.append(appnodetmp)
+            pass
+            # self.createDataBody()
 
 
 statistics = Statistics()
@@ -262,7 +221,7 @@ sticky = DataArray("data/sticky.json")
 
 @app.route('/')
 def index():
-    statistics.rec('Index', 'IndexPage', request.method)
+    # statistics.rec('Index', 'IndexPage', request.method)
     return render_template('index.html', title1="mySync", title2="index")
 
 
@@ -273,7 +232,7 @@ def index_t():
 # app_sticky
 
 
-@app.route('/v<float:version>/<app>', methods=['GET', 'POST'])
+@app.route('/v<float:version>/<app>', methods=['GET', 'POST', 'DELETE'])
 def get_post_res(version, app):
     if version == 2.1:  # post data with form
         if app == 'Sticky':
@@ -306,6 +265,10 @@ def get_post_res(version, app):
                                     return "Success"
                 else:
                     return "error get wrong data"
+
+            elif access_method == 'DELETE':
+                return request.method
+
             else:
                 abort(405)  # method not allowed
 
@@ -354,57 +317,9 @@ def get_put_path_res_by_id(version, app, resid):
         abort(404)
 
 
-@app.route('/v2/Sticky', methods=['GET'])
-def sticky_index():
-    statistics.rec('Sticky', 'StickyIndex', request.method)
-    return render_template('index_sticky.html', title1="Sticky", title2="index")
-
-
-@app.route('/v2/Sticky/get', methods=['GET'])
-def sticky_get():
-    statistics.rec('Sticky', 'getSticky', request.method)
-    return json.dumps(sticky.dataArray)
-
-
-@app.route('/v2/Sticky/add', methods=['POST'])
-def sticky_add():
-    statistics.rec('Sticky', 'addSticky', request.method)
-    newdata = {}
-    if 'title' in request.values.to_dict():
-        if 'con' in request.values.to_dict():
-            if 'time' in request.values.to_dict():
-                if 'devName' in request.values.to_dict():
-                    if 'ip' in request.values.to_dict():
-                        newdata['title'] = request.values.to_dict()['title']
-                        newdata['con'] = request.values.to_dict()['con']
-                        newdata['time'] = request.values.to_dict()['time']
-                        newdata['devName'] = request.values.to_dict()[
-                            'devName']
-                        newdata['ip'] = request.values.to_dict()['ip']
-                        sticky.add(newdata)
-                        return "Success"
-    else:
-        return "error get wrong data"
-
-
-@app.route('/v2/Sticky/del', methods=['GET'])
-def sticky_del():
-    statistics.rec('Sticky', 'delSticky', request.method)
-    id_todel = request.values.to_dict()['id']
-    sticky.delbyId(id_todel)
-    return 'del done'
-
-
-@app.route('/v2/Sticky/clear', methods=['GET'])
-def sticky_clear():
-    statistics.rec('Sticky', 'clearSticky', request.method)
-    sticky.clear()
-    return 'clear done'
-
-
 @app.route('/statistics', methods=['GET'])
 def getStatistics():
-    statistics.rec('statistics', 'statistics', request.method)
+    # statistics.rec('statistics', 'statistics',   request.method)
     return json.dumps(statistics.apis)
 
 
@@ -425,9 +340,33 @@ def config_reset(appname):
         pass
 
 
-@app.route('/test', methods=['GET'])
-def test():
-    return abort(404)
+@app.route('/config/getroutes', methods=['GET'])
+def config_getroutes():
+    url_map = str(app.url_map)[5:-2]
+    url_map = url_map.split('<Rule')[1:]
+    url_map_tmp = []
+    for i in range(len(url_map)-1):
+        a = url_map[i][1:-3]
+        url_map_tmp.append(a)
+    url_map_tmp.append(url_map[-1][1:])
+
+    url_map_tmp_1_route = []
+    url_map_tmp_2_method = []
+    url_map_tmp_3_endpoint = []
+    for i in url_map_tmp:
+        tmp = i.split('->')
+        tmp_tmp = tmp[0].split('(')
+        url_map_tmp_1_route.append(tmp_tmp[0][1:-2])
+        url_map_tmp_2_method.append(tmp_tmp[1][:-2])
+        url_map_tmp_3_endpoint.append(tmp[1][1:-1])
+    route = []
+    for i in range(len(url_map_tmp_1_route)):
+        route_node = {}
+        route_node['route'] = url_map_tmp_1_route[i]
+        route_node['methods'] = url_map_tmp_2_method[i].split(', ')
+        route_node['endpoint'] = url_map_tmp_3_endpoint[i]
+        route.append(route_node)
+    return json.dumps(route)
 
 
 @app.route('/test/errorpage/<error_code>')
