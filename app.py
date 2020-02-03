@@ -8,7 +8,7 @@ import os
 import json
 import time
 import argparse
-from FileCtrl import FileCtrl
+# from FileCtrl import FileCtrl
 from DataArray import DataArray
 from werkzeug.utils import secure_filename
 
@@ -272,14 +272,14 @@ def get_put_path_res_by_id(version, app, resid_raw):
 
             # PUT: 收到完整的数据 覆盖制定id数据
             elif access_method == 'PUT':
-                request_data = request_data.args.to_dict()
+                request_data = request.args.to_dict()
                 # TODO add function to check data
                 sticky.dataArray[resid].update(request_data)
                 return 'cover success'
 
             # PATH: 收到一条增量数据更新资源
             elif access_method == 'PATH':
-                request_data = request_data.args.to_dict()
+                request_data = request.args.to_dict()
                 # TODO add function to check data
                 sticky.dataArray[resid].update(request_data)
                 return 'update success'
@@ -331,12 +331,15 @@ def get_put_path_res_by_id(version, app, resid_raw):
 
             # 不支持 PATH
             # TODO 返回405
-
+            elif access_method == 'PATH':
+                return abort(405)
             # DELETE
             # TODO 判断请求数据是否完整 否则返回400
             # TODO 数据文件是否存在
             # TODO 不存在返回404
             # TODO 存在则将文件删除后返回
+            elif access_method == 'DELETE':
+                return abort(405)
             pass
 
         else:  # end of app switch
