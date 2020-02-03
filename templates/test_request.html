@@ -5,27 +5,15 @@
 
 {% block addition_js %}
 <script>
-    // axios.post("/test/postget",{ac:"aa"})
-    // .then(function(response){
-    //     console.log(response.data);
-    // },function(e){
-    //     console.log(e)
-    // });
-    $.post("/test/postget",{'aaa':"aaa"},function(result,status){
-        console.log(result);
-        console.log(status);
-    });
 </script>
 {% endblock %}
 
 {% block body %}
 
-<form action="/v2/Sticky/add" method="POST" role="form">
-    <legend>"/v2/Sticky/add"</legend>
-    <div class="form-group">
-        <input type="text" class="form-control" name="title" placeholder="Input field" value="this is title">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+<form action="/v2.1/file" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit" value="aaa">aaa</button>
 </form>
+
 
 {% endblock %}

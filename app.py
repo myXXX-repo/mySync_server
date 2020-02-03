@@ -8,8 +8,13 @@ import os
 import json
 import time
 import argparse
+from FileCtrl import FileCtrl
+from DataArray import DataArray
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+# app.config['UPLOAD_FOLDER'] = './data'
+# ALLOWED_EXTENSIONS = set(['txt'])
 
 
 # re_define error page
@@ -139,84 +144,25 @@ def error_505(e):
     return render_template('error_page.html', error_code=errorcode, error_msg="HTTPVersionNotSupported"), errorcode
 
 
-# re_define route
+# class Statistics:
+#     def __init__(self):
+#         self.apis = []
 
-class FileCtrl:  # ctrl file
-    def __init__(self, filePath, fileFolder='data'):
-        if os.path.exists(fileFolder):
-            pass
-        else:
-            os.mkdir(fileFolder)
-        self.filePath = filePath
-
-    def write_append(self, str):
-        with open(self.filePath, 'a') as filefd:
-            filefd.write(str+'\n')
-
-    def write_cover(self, str):
-        with open(self.filePath, 'w') as filefd:
-            filefd.write(str)
-
-    def read(self, AUTOCREATE=0):
-        data_to_return = ""
-        if os.path.isfile(self.filePath):
-            # if file exists
-            # read file and return data
-            with open(self.filePath, 'r') as filefd:
-                data_to_return = filefd.read()
-        else:
-            # if file not exists
-            if AUTOCREATE == 1:
-                with open(self.filePath, 'w') as filefd:
-                    filefd.write("")
-                pass
-        return data_to_return
+#         self.fileCtrl = FileCtrl("data/Statistics.json")
+#         jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
+#         if jsonDatatmp != "":
+#             self.apis = json.loads(jsonDatatmp)
+#         else:
+#             pass
+#             # self.createDataBody()
 
 
-class Statistics:
-    def __init__(self):
-        self.apis = []
-
-        self.fileCtrl = FileCtrl("data/Statistics.json")
-        jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
-        if jsonDatatmp != "":
-            self.apis = json.loads(jsonDatatmp)
-        else:
-            pass
-            # self.createDataBody()
-
-
-statistics = Statistics()
-
-
-class DataArray:
-    def __init__(self, filePath):
-        self.dataArray = []
-        self.fileCtrl = FileCtrl(filePath)
-        jsonDatatmp = self.fileCtrl.read(AUTOCREATE=1)
-        if jsonDatatmp != "":
-            self.dataArray = json.loads(jsonDatatmp)
-
-    def get(self):
-        return self.dataArray
-
-    def getbyId(self, id):
-        return self.dataArray[id]
-
-    def add(self, new):
-        self.dataArray.append(new)
-        self.fileCtrl.write_cover(json.dumps(self.dataArray))
-
-    def clear(self):
-        self.dataArray = []
-        self.fileCtrl.write_cover(json.dumps(self.dataArray))
-
-    def delbyId(self, id):
-        self.dataArray.pop(int(id))
-        self.fileCtrl.write_cover(json.dumps(self.dataArray))
+# statistics = Statistics()
 
 
 sticky = DataArray("data/sticky.json")
+
+# re_define route
 
 
 @app.route('/')
@@ -225,23 +171,23 @@ def index():
     return render_template('index.html', title1="mySync", title2="index")
 
 
-@app.route('/t', methods=['GET', 'post', 'PUT', 'PATH'])
-def index_t():
-    return request.args.to_dict()
-
-# app_sticky
-
-
 @app.route('/v<float:version>/<app>', methods=['GET', 'POST', 'DELETE'])
-def get_post_res(version, app):
+def get_post_res_list(version, app):
     if version == 2.1:  # post data with form
+        access_method = request.method
+        # ------------------------------------------
+        #   @uri: http://host:port/v2.1/Sticky
+        #   @methods: GET POST DELETE
+        # ------------------------------------------
         if app == 'Sticky':
-            access_method = request.method
+
+            # GET: 获取整个数据资源列表json数组格式
             if access_method == 'GET':  # 获取资源
-                data_to_return = []
+                data_to_return = []  # 初始化用于返回的资源列表
                 request_data = request.args.to_dict()  # 用于保存获取数据的过滤
                 if 'limit' in request_data:
                     sticky_data = sticky.dataArray
+                    # TODO 加上一些异常处理 确保limit的值正确
                     data_to_return = sticky_data[0:int(request_data['limit'])]
                 else:
                     data_to_return = sticky.dataArray
@@ -251,30 +197,42 @@ def get_post_res(version, app):
             elif access_method == 'POST':  # 添加资源
                 request_data = request.values.to_dict()
                 newdata = {}
+                keylist = ['title', 'con', 'time', 'devName', 'ip']
                 if 'title' in request_data:
                     if 'con' in request_data:
                         if 'time' in request_data:
                             if 'devName' in request_data:
                                 if 'ip' in request_data:
-                                    newdata['title'] = request_data['title']
-                                    newdata['con'] = request_data['con']
-                                    newdata['time'] = request_data['time']
-                                    newdata['devName'] = request_data['devName']
-                                    newdata['ip'] = request_data['ip']
+                                    newdata = {
+                                        keylist[i]: request_data[keylist[i]] for i in range(len(keylist))}
                                     sticky.add(newdata)
                                     return "Success"
-                else:
-                    return "error get wrong data"
+                return "error get wrong data"
 
             elif access_method == 'DELETE':
-                return request.method
+                sticky.dataArray = []
+                return str(sticky.dataArray)
 
             else:
                 abort(405)  # method not allowed
 
         elif app == 'tabSync':
             pass
+        elif app == 'file':
+            print(str(request))
+            # print(request.method)
+            print(request.files.to_dict())
+            file = request.files['file']
+            print(file)
+            # print(file.filename.to_dict())
+            return request.method
 
+        elif app == 'markdown':
+            if access_method == 'GET':
+                return json.dumps(os.listdir('data/markdown'))
+            elif access_method == 'POST':
+                abort(404)
+            pass
         else:
             abort(404)
 
@@ -282,45 +240,117 @@ def get_post_res(version, app):
         abort(404)
 
 
-@app.route('/v<float:version>/<app>/<int:resid>', methods=['GET', 'PUT', 'PATH', 'DELETE'])
-def get_put_path_res_by_id(version, app, resid):
+@app.route('/v<float:version>/<app>/<resid_raw>', methods=['GET', 'PUT', 'PATH', 'DELETE'])
+def get_put_path_res_by_id(version, app, resid_raw):
     if version == 2.1:
+        access_method = request.method
         if app == 'Sticky':
+            # ------------------------------------------
+            #   @uri: http://host:port/v2.1/Sticky/0
+            #   @methods: GET PUT PATH DELETE
+            # ------------------------------------------
+            resid = 0
+            # 将资源id转成int类型
+            # 如果resid_raw转换失败
+            # 则抛出异常并返回400
+            try:
+                resid = int(resid_raw)
+            except Exception as e:
+                print(e)
+                abort(400)
+
+            # 如果id超出数据长度
+            # 则返回错误代码404
             if resid not in range(len(sticky.dataArray)):
                 abort(404)
-            access_method = request.method
+
+            # 判断method
+
+            # GET: 返回json格式的一条数据
             if access_method == 'GET':  # 获取指定的一条资源 by id
                 return json.dumps(sticky.dataArray)
 
-            elif access_method == 'PUT':  # 发送一条完整数据覆盖指定资源
+            # PUT: 收到完整的数据 覆盖制定id数据
+            elif access_method == 'PUT':
                 request_data = request_data.args.to_dict()
                 # TODO add function to check data
                 sticky.dataArray[resid].update(request_data)
                 return 'cover success'
 
-            elif access_method == 'PATH':  # 发送一条增量数据更新资源
+            # PATH: 收到一条增量数据更新资源
+            elif access_method == 'PATH':
                 request_data = request_data.args.to_dict()
                 # TODO add function to check data
                 sticky.dataArray[resid].update(request_data)
                 return 'update success'
 
-            elif access_method == 'DELETE':  # 删除一条数据
+            # DELETE: 删除指定id的资源
+            elif access_method == 'DELETE':
                 sticky.delbyId(resid)
                 return 'deleted success'
-            else:  # end of method judge
+            else:  # end of method switch
                 abort(405)
 
-        else:  # end of app judge
+        # ------------------------------------------
+        #   @uri: http://host:port/v2.1/file/0
+        #   @methods: GET PUT PATH DELETE
+        # ------------------------------------------
+        elif app == 'file':
+            print(request.method)
+            return request.method
+
+        # ------------------------------------------
+        #   @uri: http://host:port/v2.1/markdown/test.md
+        #   @methods: GET PUT DELETE
+        # ------------------------------------------
+        elif app == 'markdown':
+            resid = secure_filename(resid_raw)
+            markdownstr = ''
+            try:
+                with open('data/markdown/' + resid, 'r') as filefd:
+                    markdownstr = json.dumps(filefd.read())
+            except Exception as err:
+                print(err)
+                abort(404)
+
+            # GET
+            if access_method == 'GET':
+                request_data = request.args.to_dict()
+                if 'type' in request_data:
+                    if request_data['type'] == 'html':
+                        # TODO return html page
+                        return render_template('temp_markdown.html', title1='mySync', title2='MD', markdownstr=markdownstr[1:-1])
+                return json.dumps(markdownstr)
+
+            # PUT
+            # TODO 判断接收到的数据是否完整 否则返回400
+            # TODO 判断数据文件夹是否存在
+            # TODO 判断相应数据文件是否存在
+            # TODO 不存在则返回404
+            # TODO 存在则将数据覆盖后返回success
+
+            # 不支持 PATH
+            # TODO 返回405
+
+            # DELETE
+            # TODO 判断请求数据是否完整 否则返回400
+            # TODO 数据文件是否存在
+            # TODO 不存在返回404
+            # TODO 存在则将文件删除后返回
+            pass
+
+        else:  # end of app switch
             abort(404)
 
-    else:  # end of version judge
+    else:  # end of version switch
         abort(404)
 
 
 @app.route('/statistics', methods=['GET'])
 def getStatistics():
     # statistics.rec('statistics', 'statistics',   request.method)
-    return json.dumps(statistics.apis)
+    # return json.dumps(statistics.apis)
+    abort(404)
 
 
 @app.route('/config', methods=['GET'])
@@ -369,6 +399,16 @@ def config_getroutes():
     return json.dumps(route)
 
 
+@app.route('/test/markdown')
+def test_markdown():
+    mdjson = ''
+    with open('data/markdown/test.md', 'r') as filefd:
+        mdjson = json.dumps(filefd.read())
+    return render_template('index_markdown.html', title1='mySync', title2='md',
+                           # markdownjson=mdjson[1:-1]
+                           )
+
+
 @app.route('/test/errorpage/<error_code>')
 def test_error_page(error_code):
     return abort(int(error_code))
@@ -389,7 +429,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('-l', '--listen', default="0.0.0.0")
 parser.add_argument('-p', '--port', default=5000)
-parser.add_argument('-d', '--debugOn', default=False)
+parser.add_argument('-d', '--debugOn', default=True)
 args = parser.parse_args()
 
 if __name__ == "__main__":
