@@ -1,16 +1,11 @@
 from flask import Flask
 
-from App.views import init_route
+from App.views import init_view
 
 
 def create_app():
     app = Flask(__name__)
 
-    init_route(app)
+    init_view(app)
 
     return app
-
-
-if __name__ == '__main__':
-    app.create_app()
-    app.run()
