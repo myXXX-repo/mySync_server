@@ -1,6 +1,8 @@
 # from flask import Flask
+from .Sticky_block import Sticky_block
+from .Test_block import Test_block
+from .Config_block import Config_block
 from .mainpage import mainpage
-from .configpage import config
 from .errorpage import init_error_page
 
 
@@ -8,8 +10,9 @@ from .errorpage import init_error_page
 
 def init_view(app):
     app.register_blueprint(mainpage)
-    app.register_blueprint(config)
-
+    app.register_blueprint(Config_block)
+    app.register_blueprint(Sticky_block)
+    app.register_blueprint(Test_block)
     init_error_page(app)
 
     return app
