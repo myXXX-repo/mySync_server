@@ -3,6 +3,7 @@ from .Markdown_block import Markdown_block
 from .Sticky_block import Sticky_block
 from .Test_block import Test_block
 from .Config_block import Config_block
+from .Git_block import Git_block
 from .mainpage import mainpage
 from .errorpage import init_error_page
 
@@ -15,6 +16,7 @@ def init_view(app):
     app.register_blueprint(Sticky_block)
     app.register_blueprint(Test_block)
     app.register_blueprint(Markdown_block)
+    app.register_blueprint(Git_block)
     init_error_page(app)
 
     return app

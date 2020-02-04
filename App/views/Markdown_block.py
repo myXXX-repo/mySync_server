@@ -11,6 +11,11 @@ from App.models import FileConCtrl
 Markdown_block = Blueprint('Markdown_block', __name__)
 
 
+@Markdown_block.route('/markdown')
+def test():
+    return render_template('index_markdown.html', title1='mySync', title2='MD')
+
+
 @Markdown_block.route(
     '/v<float:version>/Markdown',
     methods=['GET', 'POST', 'DELETE'])
@@ -35,10 +40,10 @@ def get_post_res_list(version):
                 print(err)
                 return abort(500)
             return markdown_list
-            pass
+
         elif access_method == 'POST':
             return abort(404)
-            pass
+
         elif access_method == 'DELETE':
 
             return abort(404)

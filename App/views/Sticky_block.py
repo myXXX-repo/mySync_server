@@ -38,7 +38,7 @@ def get_post_res_list(version):
                     print(err)
                     return abort(400)
 
-                data_to_return = sticky_data[0:int(request_data['limit'])]
+                data_to_return = sticky_data[0:int(limit)]
             else:
                 data_to_return = sticky.dataArray
             return jsonencode(data_to_return)
@@ -52,7 +52,8 @@ def get_post_res_list(version):
                     if 'time' in request_data:
                         if 'devName' in request_data:
                             if 'ip' in request_data:
-                                newdata = {keylist[i]: request_data[keylist[i]] for i in range(len(keylist))}
+                                newdata = {
+                                    keylist[i]: request_data[keylist[i]] for i in range(len(keylist))}
                                 sticky.add(newdata)
                                 return "Success"
             return "error get wrong data"
