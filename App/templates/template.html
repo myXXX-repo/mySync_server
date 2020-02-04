@@ -8,7 +8,7 @@
 
 
     <link href="http://112.5.37.138:51370/recrepo/bootstrap3.3.7/css/bootstrap.min.css" rel="stylesheet"
-        type="text/css" />
+          type="text/css"/>
 
     <style>
         body {
@@ -18,21 +18,21 @@
     </style>
 
     {% block icon %}
-    <link rel="shortcut icon" href="/static/favicon.ico" />
-    <link rel="bookmark" href="/static/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/static/favicon.ico"/>
+        <link rel="bookmark" href="/static/favicon.ico" type="image/x-icon"/>
     {% endblock %}
 
 
     <title>
         {% block title %}
-        {% if title1 %}
-        {{ title1 }}
-        {% if title2 %}
-        - {{ title2 }}
-        {% endif %}
-        {% else %}
-        template
-        {% endif %}
+            {% if title1 %}
+                {{ title1 }}
+                {% if title2 %}
+                    - {{ title2 }}
+                {% endif %}
+            {% else %}
+                template
+            {% endif %}
         {% endblock %}
     </title>
     {% block addition_css %}
@@ -42,17 +42,18 @@
 </head>
 
 <body>
-    {% block header %}
+{% block header %}
     <!-- nav -->
     <div class="page-header">
         <h1>
-            {% if title1 %}{{title1}}{% else %}template{% endif %}<small>{% if title2 %}{{title2}}{% else %}page{% endif %}</small>
+            {% if title1 %}{{ title1 }}{% else %}template{% endif %}<small>
+            {% if title2 %}{{ title2 }}{% else %}page{% endif %}</small>
         </h1>
     </div>
 
     <!-- con body  -->
-    {% endblock %}
-    {% block body %}
+{% endblock %}
+{% block body %}
 
 
     <ol class="breadcrumb">
@@ -82,20 +83,20 @@
         <!-- Table -->
         <table class="table">
             <thead>
-                <tr>
-                    <th>Heading 1</th>
-                </tr>
-                <tr>
-                    <th>Heading 2</th>
-                </tr>
+            <tr>
+                <th>Heading 1</th>
+            </tr>
+            <tr>
+                <th>Heading 2</th>
+            </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Content 1</td>
-                </tr>
-                <tr>
-                    <td>Content 2</td>
-                </tr>
+            <tr>
+                <td>Content 1</td>
+            </tr>
+            <tr>
+                <td>Content 2</td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -108,25 +109,25 @@
             Panel content
         </div>
     </div>
-    {% endblock %}
+{% endblock %}
 
-    {% block foot %}
+{% block foot %}
     <!-- foot -->
     <hr>
     <p class="navbar-text pull-left" style="display: inline-block;">
         &copy; powered by WolfHugo
     </p>
-    {% endblock %}
-    <!-- <p class="navbar-text pull-right" style="display: inline-block;">
-        <a href="/v2/statistics" class="navbar-link">statistics</a>
-    </p> -->
+{% endblock %}
+<!-- <p class="navbar-text pull-right" style="display: inline-block;">
+    <a href="/v2/statistics" class="navbar-link">statistics</a>
+</p> -->
 
-    <script src="http://112.5.37.138:51370/recrepo/vue/vue-2.6.11-dev.js"></script>
-    <script src="http://112.5.37.138:51370/recrepo/jquery/jquery-1.10.2-min.js"></script>
-    <script src="http://112.5.37.138:51370/recrepo/bootstrap3.3.7/js/bootstrap.min.js"></script>
-    <script src="http://112.5.37.138:51370/recrepo/axios/axios.min.js"></script>
-    {% block addition_js %}
-    {% endblock %}
+<script src="http://112.5.37.138:51370/recrepo/vue/vue-2.6.11-dev.js"></script>
+<script src="http://112.5.37.138:51370/recrepo/jquery/jquery-1.10.2-min.js"></script>
+<script src="http://112.5.37.138:51370/recrepo/bootstrap3.3.7/js/bootstrap.min.js"></script>
+<script src="http://112.5.37.138:51370/recrepo/axios/axios.min.js"></script>
+{% block addition_js %}
+{% endblock %}
 </body>
 
 </html>

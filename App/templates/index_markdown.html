@@ -1,34 +1,34 @@
 {% extends "template.html" %}
 
 {% block addition_css %}
-<!-- <link href="/static/highlight.js/src/styles/rainbow.css" rel='stylesheet' /> -->
-<style>
-    #content {
-        padding: 15px;
-        border: solid 1px black;
-    }
-</style>
+    <!-- <link href="/static/highlight.js/src/styles/rainbow.css" rel='stylesheet' /> -->
+    <style>
+        #content {
+            padding: 15px;
+            border: solid 1px black;
+        }
+    </style>
 {% endblock %}
 
 {% block addition_js %}
-<script src="/static/marked.min.js"></script>
-<!-- <script src="/static/highlight.js/src/highlight.js"></script> -->
-<script>
-    axios.get('/v2.1/markdown/test.md').then(function (response) {
-        document.getElementById('content').innerHTML =
-            marked(response.data);
-        $('table').attr('class', 'table table-hover');
+    <script src="/static/marked.min.js"></script>
+    <!-- <script src="/static/highlight.js/src/highlight.js"></script> -->
+    <script>
+        axios.get('/v2.1/markdown/test.md').then(function (response) {
+            document.getElementById('content').innerHTML =
+                marked(response.data);
+            $('table').attr('class', 'table table-hover');
+            // hljs.initHighlightingOnLoad();
+        });
+        // document.getElementById('content').innerHTML =
+        //     marked('{{ markdownjson }}');
+        // $('table').attr('class', 'table table-hover');
         // hljs.initHighlightingOnLoad();
-    });
-    // document.getElementById('content').innerHTML =
-    //     marked('{{ markdownjson }}');
-    // $('table').attr('class', 'table table-hover');
-    // hljs.initHighlightingOnLoad();
-</script>
+    </script>
 {% endblock %}
 
 {% block body %}
-<div id='content'>
+    <div id='content'>
 
-</div>
+    </div>
 {% endblock %}

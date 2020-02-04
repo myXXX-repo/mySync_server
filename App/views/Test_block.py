@@ -14,5 +14,3 @@ def test_error_page(errcode):
 @Test_block.route('/test/request')
 def test_request():
     return render_template("test_request.html", title1="mySync", title2="testrequest")
-
-

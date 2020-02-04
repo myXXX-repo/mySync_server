@@ -6,10 +6,11 @@ from json import dumps as jsonencode
 Sticky_block = Blueprint('Sticky_block', __name__)
 
 
-@Sticky_block.route('/v<float:version>/Sticky', methods=['GET', 'POST', 'DELETE'])
+@Sticky_block.route(
+    '/v<float:version>/Sticky',
+    methods=['GET', 'POST', 'DELETE'])
 def get_post_res_list(version):
     sticky = DataArray('data/Sticky.json')
-
 
     if version == 1.0:
         return abort(410)
@@ -62,9 +63,12 @@ def get_post_res_list(version):
         return abort(404)
 
 
-@Sticky_block.route('/v<float:version>/Sticky/<resid_raw>', methods=['GET', 'PUT', 'PATH', 'DELETE'])
+@Sticky_block.route(
+    '/v<float:version>/Sticky/<int:resid_raw>',
+    methods=['GET', 'PUT', 'PATH', 'DELETE'])
 def get_put_path_res_by_id(version, resid_raw):
     sticky = DataArray('data/Sticky.json')
+    access_method = request.method
 
     if version == 1.0:
         return abort(410)
@@ -76,19 +80,11 @@ def get_put_path_res_by_id(version, resid_raw):
     #   @methods: GET PUT PATH DELETE
     # ------------------------------------------
     elif version == 2.1:
-        access_method = request.method
-        resid = 0
-        # 将资源id转成int类型
-        # 如果resid_raw转换失败
-        # 则抛出异常并返回400
-        try:
-            resid = int(resid_raw)
-        except Exception as e:
-            print(e)
-            return abort(400)
 
-            # 如果id超出数据长度
-            # 则返回错误代码404
+        resid = resid_raw
+
+        # 如果id超出数据长度
+        # 则返回错误代码404
         if resid not in range(len(sticky.dataArray)):
             return abort(404)
 
