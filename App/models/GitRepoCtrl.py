@@ -14,6 +14,7 @@ class GitRepoCtrl:
         self.git_cmd_getGit = 'whereis git'
         self.git_cmd_clone = 'git clone {} -b {} --depth {}'.format(
             remote_addr, branch, depth)
+        self.git_cmd_gotolocation = 'cd {}'.format(locate_path)
         self.git_cmd_gotorepo = 'cd {}/{}'.format(locate_path, self.reponame)
         self.git_cmd_fetch = 'git fetch'
         self.git_cmd_status = 'git status'
@@ -42,7 +43,8 @@ class GitRepoCtrl:
             return True
 
     def git_clone(self):
-        os.system(self.git_cmd_clone)
+        os.system('{}&&{}'.format(
+            self.git_cmd_gotolocation, self.git_cmd_clone))
 
     def repo_is_uptodate(self):
         os.system('{}&&{}'.format(
