@@ -6,6 +6,7 @@ from .Config_block import Config_block
 from .Git_block import Git_block
 from .mainpage import mainpage
 from .errorpage import init_error_page
+from .Statistics import addroute
 
 
 # app = Flask(__name__)
@@ -17,7 +18,9 @@ def init_view(app):
     app.register_blueprint(Test_block)
     app.register_blueprint(Markdown_block)
     app.register_blueprint(Git_block)
+
     init_error_page(app)
+    addroute(app)
 
     return app
 
