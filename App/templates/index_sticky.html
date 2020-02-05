@@ -1,63 +1,63 @@
 {% extends "template.html" %}
 
 {% block addition_css %}
-    <style>
-        .btn-danger {
-            margin: 15px;
-        }
-    </style>
+<style>
+    .btn-danger {
+        margin: 15px;
+    }
+</style>
 {% endblock %}
 
 {% block addition_js %}
-    <script src="/static/index_sticky.js"></script>
+<script src="/static/index_sticky.js"></script>
 {% endblock %}
 
 {% block body %}
-    <div id="sticky_panel">
-        <div class="panel panel-default" style="width:390px;display: inline-block;vertical-align: top;">
-            <div class="panel-heading">
-                <h3 class="panel-title">Input panel</h3>
-            </div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label>title</label>
-                    <input type="text" class="form-control" placeholder="Input Title" v-model=title>
-                </div>
-                <div class="form-group">
-                    <label>con</label>
-                    <textarea class="form-control" rows="3" placeholder="Input Con" v-model=con id="con"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>time</label>
-                    <input type="text" class="form-control" placeholder="Input Time" :value=time>
-                </div>
-                <div class="form-group">
-                    <label>devName</label>
-                    <input type="text" class="form-control" placeholder="Input DevName" v-model=devName>
-                </div>
-                <div class="form-group">
-                    <label>send IP</label>
-                    <input type="text" class="form-control" placeholder="Input IP" :value=ip>
-                </div>
-
-                <button type="submit" class="btn btn-primary" @Click=onBtnSubmitClick>Submit</button>
-
-                <button type="button" class="btn btn-warning" @click=onBtnResetClick>reset</button>
-
-            </div>
+<div id="sticky_panel">
+    <div class="panel panel-default" style="width:390px;display: inline-block;vertical-align: top;">
+        <div class="panel-heading">
+            <h3 class="panel-title">Input panel</h3>
         </div>
-        {% raw %}
-        <div class="panel panel-default" style="display: inline-block;vertical-align: top;">
-            <div class="panel-heading">
-                <h3 class="panel-title">Sticky</h3>
+        <div class="panel-body">
+            <div class="form-group">
+                <label>title</label>
+                <input type="text" class="form-control" placeholder="Input Title" v-model=title>
+            </div>
+            <div class="form-group">
+                <label>con</label>
+                <textarea class="form-control" rows="3" placeholder="Input Con" v-model=con id="con"></textarea>
+            </div>
+            <div class="form-group">
+                <label>time</label>
+                <input type="text" class="form-control" placeholder="Input Time" :value=time>
+            </div>
+            <div class="form-group">
+                <label>devName</label>
+                <input type="text" class="form-control" placeholder="Input DevName" v-model=devName>
+            </div>
+            <div class="form-group">
+                <label>send IP</label>
+                <input type="text" class="form-control" placeholder="Input IP" :value=ip>
             </div>
 
-            <button type="button" class="btn btn-danger" @click=onBtnClearClick>clear</button>
+            <button type="submit" class="btn btn-primary" @Click=onBtnSubmitClick>Submit</button>
 
-            <div class="panel-body">
+            <button type="button" class="btn btn-warning" @click=onBtnResetClick>reset</button>
 
-                <table class="table table-bordered table-hover">
-                    <thead>
+        </div>
+    </div>
+    {% raw %}
+    <div class="panel panel-default" style="display: inline-block;vertical-align: top;">
+        <div class="panel-heading">
+            <h3 class="panel-title">Sticky</h3>
+        </div>
+
+        <button type="button" class="btn btn-danger" @click=onBtnClearClick>clear</button>
+
+        <div class="panel-body">
+
+            <table class="table table-bordered table-hover">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Title</th>
@@ -67,8 +67,8 @@
                         <th>send IP</th>
                         <th>Operate</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     <tr v-for="(sticky,i) in sticky_list">
                         <td>{{i+1}}</td>
                         <td>{{sticky.title}}</td>
@@ -78,10 +78,10 @@
                         <td>{{sticky.ip}}</td>
                         <td><a @click='delstickybyid(i)'>del</a></td>
                     </tr>
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
-    {% endraw %}
+</div>
+{% endraw %}
 {% endblock %}
