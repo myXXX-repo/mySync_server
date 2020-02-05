@@ -1,7 +1,9 @@
 from json import dumps as jsonencode
+from flask import Flask
 
 
 def addroute(app):
+
     @app.route('/getroutes', methods=['GET'])
     def config_getroutes():
         url_map = str(app.url_map)[5:-2]
@@ -29,4 +31,5 @@ def addroute(app):
             route_node['endpoint'] = url_map_tmp_3_endpoint[i]
             route.append(route_node)
         return jsonencode(route)
+
     return app
