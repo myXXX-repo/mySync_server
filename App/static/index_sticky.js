@@ -6,13 +6,13 @@ let ensure_2 = function (num) {
 }
 
 let getFormatedDateTime = function () {
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = ensure_2(date.getMonth() + 1);
-    var day = ensure_2(date.getDate());
-    var hour = ensure_2(date.getHours());
-    var min = ensure_2(date.getMinutes());
-    var sec = ensure_2(date.getSeconds());
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = ensure_2(date.getMonth() + 1);
+    const day = ensure_2(date.getDate());
+    const hour = ensure_2(date.getHours());
+    const min = ensure_2(date.getMinutes());
+    const sec = ensure_2(date.getSeconds());
     return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
 }
 
@@ -74,15 +74,7 @@ let input_panel = new Vue({
                 console.log(err);
             });
         },
-        // onCtrlKeyUp() {
-        //     let that = this;
-        //     document.onkeydown = function (e) {
-        //         // let keyNum=window.event ? e.keyCode : e.which;
-        //         if ((keyNum = window.event ? e.keyCode : e.which) == 13) {
-        //             that.onBtnSubmitClick();
-        //         }
-        //     }
-        // },
+
         delstickybyid(id) {
             let that = this;
             axios({

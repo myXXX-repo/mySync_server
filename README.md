@@ -18,18 +18,24 @@
 
 ### directory tree
 
-    +--static/
-    |   +--favicon.ico
-    |   +--index.js
-    |   +--index_sticky.js
-    +--templates/
-    |   +--template.html
-    |   +--temp.html
-    |   +--index.html
+    +--App/
+    |   +--ext/
+    |   |   +--__init__.py
+    |   |   +--FileConCtrl.py
+    |   |   +--DataArray.py
+    |   |   +--GitRepoCtrl.py
+    |   +--models/
+    |   |   +--__init__.py
+    |   +--views/
+    |   |   +--...
+    |   +--templates/
+    |   |   +--template.html
+    |   |   +--temp.html
+    |   |   +--index.html
     +--data/ (auto create)
     |   +--markdown/
     |   +--sticky.json
-    +--app.py
+    +--manage.py
 
 ### server usage
 

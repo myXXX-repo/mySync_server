@@ -1,15 +1,15 @@
 let getCurrentAddress = function () {
     return window.location.protocol + '//' + window.location.host;
-}
+};
 let toBool = function (str) {
     if (str == 'true') {
         return true;
     } else {
         return false;
     }
-}
+};
 let init = function () {
-    if (localStorage.getItem('inited') != 1) {
+    if (localStorage.getItem('inited') !== 1) {
         localStorage.setItem('inited', 1);
         localStorage.setItem('debug', 0);
         localStorage.setItem('api_list_show_Sticky', 'true');
@@ -17,7 +17,7 @@ let init = function () {
         localStorage.setItem('api_list_show_toDoList', 'true');
         localStorage.setItem('api_list_show_statistics', 'true')
     }
-}
+};
 init();
 
 new Vue({
@@ -79,52 +79,52 @@ new Vue({
     }
 });
 
-new Vue({
-    el: "#Statistics_panel",
-    data: {
-        this_address: getCurrentAddress(),
-        title: "Api Call Statistics",
-        th: ['App Name', 'Api Name', 'Methods', 'Number Of Calls', 'Last Call Time', 'Operation'],
-        apis: []
-    },
-    methods: {
-        initStatisticsData() {
-            this.apis = [];
-            let that = this
-            axios.get('/statistics').then(function (response) {
-                console.log(response.data)
-                response.data.forEach(app => {
-                    app.apis.forEach(api => {
-                        var tmp = {};
-                        tmp.appname = app.appname;
-                        tmp.apiname = api.apiname;
-                        tmp.method = api.method;
-                        tmp.NumOfCall = api.NumOfCall;
-                        tmp.LastCallTime = api.LastCallTime;
-
-                        that.apis.push(tmp);
-                    });
-                });
-            });
-        },
-    },
-    mounted: function () {
-        this.apis = [];
-        let that = this
-        axios.get('/statistics').then(function (response) {
-            console.log(response.data)
-            response.data.forEach(app => {
-                app.apis.forEach(api => {
-                    var tmp = {};
-                    tmp.appname = app.appname;
-                    tmp.apiname = api.apiname;
-                    tmp.method = api.method;
-                    tmp.NumOfCall = api.NumOfCall;
-                    tmp.LastCallTime = api.LastCallTime;
-
-                    that.apis.push(tmp);
-                });
-            });
-        });
-    }
-});
+// new Vue({
+//     el: "#Statistics_panel",
+//     data: {
+//         this_address: getCurrentAddress(),
+//         title: "Api Call Statistics",
+//         th: ['App Name', 'Api Name', 'Methods', 'Number Of Calls', 'Last Call Time', 'Operation'],
+//         apis: []
+//     },
+//     methods: {
+//         initStatisticsData() {
+//             this.apis = [];
+//             let that = this;
+//             axios.get('/statistics').then(function (response) {
+//                 console.log(response.data);
+//                 response.data.forEach(app => {
+//                     app.apis.forEach(api => {
+//                         var tmp = {};
+//                         tmp.appname = app.appname;
+//                         tmp.apiname = api.apiname;
+//                         tmp.method = api.method;
+//                         tmp.NumOfCall = api.NumOfCall;
+//                         tmp.LastCallTime = api.LastCallTime;
+//
+//                         that.apis.push(tmp);
+//                     });
+//                 });
+//             });
+//         },
+//     },
+//     mounted: function () {
+//         this.apis = [];
+//         let that = this;
+//         axios.get('/statistics').then(function (response) {
+//             console.log(response.data);
+//             response.data.forEach(app => {
+//                 app.apis.forEach(api => {
+//                     var tmp = {};
+//                     tmp.appname = app.appname;
+//                     tmp.apiname = api.apiname;
+//                     tmp.method = api.method;
+//                     tmp.NumOfCall = api.NumOfCall;
+//                     tmp.LastCallTime = api.LastCallTime;
+//
+//                     that.apis.push(tmp);
+//                 });
+//             });
+//         });
+//     }
+// });
