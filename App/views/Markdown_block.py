@@ -33,7 +33,6 @@ def get_post_res_list(version):
     # ------------------------------------------
     elif version == 2.1:
         if access_method == 'GET':
-            markdown_list = []
             try:
                 markdown_list = jsonencode(listdir('data/markdown'))
             except Exception as err:

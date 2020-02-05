@@ -1,6 +1,7 @@
 from flask import Blueprint, request, abort
 from flask import render_template
 
+from ..models import DataArray
 from ..models.GitRepoCtrl import GitRepoCtrl
 
 import threading
@@ -18,9 +19,11 @@ gitlist_node = {
     'remote_addr': '',
     'local_addr': '',
     'branch': '',
-    'currrent_commit_id': '',
-    'lastUpdateTime': ''
+    'current_commit_id': '',
+    'lastUpdateTime': '',
 }
+
+gitrepolist = DataArray('data/GitRepos.json')
 
 
 def temp():
@@ -42,6 +45,7 @@ def gitCtrl(version):
         return abort(404)
     elif version == 2.0:
         return abort(404)
+
     elif version == 2.1:
         access_method = request.method
 
