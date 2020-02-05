@@ -1,8 +1,7 @@
 from flask import Blueprint, request, abort
-from flask import render_template
 
-from ..models import DataArray
-from ..models.GitRepoCtrl import GitRepoCtrl
+from ..ext import DataArray
+from App.ext.GitRepoCtrl import GitRepoCtrl
 
 import threading
 

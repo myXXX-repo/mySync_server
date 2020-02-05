@@ -6,7 +6,7 @@ from os import listdir
 
 from werkzeug.utils import secure_filename
 
-from App.models import FileConCtrl
+from App.ext import FileConCtrl
 
 Markdown_block = Blueprint('Markdown_block', __name__)
 

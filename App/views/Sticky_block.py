@@ -1,6 +1,6 @@
 from flask import Blueprint, request, abort
 from flask import render_template
-from ..models import DataArray
+from ..ext import DataArray
 from json import dumps as jsonencode
 
 Sticky_block = Blueprint('Sticky_block', __name__)
