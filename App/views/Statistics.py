@@ -23,10 +23,10 @@ def addroute(app):
             url_map_tmp_3_endpoint.append(tmp[1][1:-1])
         route = []
         for i in range(len(url_map_tmp_1_route)):
-            route_node = {}
-            route_node['route'] = url_map_tmp_1_route[i]
-            route_node['methods'] = url_map_tmp_2_method[i].split(', ')
-            route_node['endpoint'] = url_map_tmp_3_endpoint[i]
+            route_node = {
+                'route': url_map_tmp_1_route[i],
+                'methods': url_map_tmp_2_method[i].split(', '),
+                'endpoint': url_map_tmp_3_endpoint[i]}
             route.append(route_node)
         return jsonencode(route)
     return app
