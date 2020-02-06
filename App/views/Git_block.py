@@ -25,15 +25,26 @@ gitlist_node = {
 gitrepolist = DataArray('data/GitRepos.json')
 
 
-def temp():
-    repo = GitRepoCtrl(
-        'https://github.com/alone-wolf/ifTheDoorOpen.git', locate_path='./data')
-    repo.ensureRepoUptodate()
+def handle_repo():
+    gitlist = [
+        {
+            'remote_addr': 'https://github.com/alone-wolf/ifTheDoorOpen.git',
+            'local_addr': './data'
+        },
+        {
+            'remote_addr': 'https://github.com/alone-wolf/learn_doc_md.git',
+            'local_addr': './data'
+        }
+    ]
+    for i in gitlist:
+        repo = GitRepoCtrl(i['remote_addr'], i['local_addr'])
+        repo.ensureRepoUptodate()
+    print('repo update done')
 
 
-@Git_block.route('/Git_block')
+@Git_block.route('/Git/ensureuptodate')
 def index():
-    th = threading.Thread(target=temp)
+    th = threading.Thread(target=handle_repo)
     th.start()
     return 'cmd recived'
 
