@@ -1,7 +1,5 @@
 from flask import Blueprint, request, abort
 from flask import render_template
-# from ..ext import DataArray
-# from json import dumps as jsonencode
 
 Test_block = Blueprint('Test_block', __name__)
 

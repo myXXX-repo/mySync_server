@@ -1,4 +1,64 @@
+from json import dumps as jsonencode
+from json import loads as jsondecode
 import os
+
+class FileConCtrl:  # ctrl file
+    def __init__(self, filePath, fileFolder='data'):
+        if os.path.exists(fileFolder):
+            pass
+        else:
+            os.mkdir(fileFolder)
+        self.filePath = filePath
+
+    def write_append(self, str):
+        with open(self.filePath, 'a') as filefd:
+            filefd.write(str + '\n')
+
+    def write_cover(self, str):
+        with open(self.filePath, 'w') as filefd:
+            filefd.write(str)
+
+    def read(self, AUTOCREATE=0):
+        data_to_return = ""
+        if os.path.isfile(self.filePath):
+            # if file exists
+            # read file and return data
+            with open(self.filePath, 'r') as filefd:
+                data_to_return = filefd.read()
+        else:
+            # if file not exists
+            if AUTOCREATE == 1:
+                with open(self.filePath, 'w') as filefd:
+                    filefd.write("")
+                pass
+        return data_to_return
+
+
+class DataArray:
+    def __init__(self, filePath):
+        self.dataArray = []
+        self.fileCtrl = FileConCtrl(filePath)
+        json_datatmp = self.fileCtrl.read(AUTOCREATE=1)
+        if json_datatmp != "":
+            self.dataArray = jsondecode(json_datatmp)
+
+    def get(self):
+        return self.dataArray
+
+    def getbyId(self, id):
+        return self.dataArray[id]
+
+    def add(self, new):
+        self.dataArray.append(new)
+        self.fileCtrl.write_cover(jsonencode(self.dataArray))
+
+    def clear(self):
+        self.dataArray = []
+        self.fileCtrl.write_cover(jsonencode(self.dataArray))
+
+    def delbyId(self, id):
+        self.dataArray.pop(int(id))
+        self.fileCtrl.write_cover(jsonencode(self.dataArray))
 
 
 class GitRepoCtrl:

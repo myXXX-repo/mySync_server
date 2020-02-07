@@ -5,21 +5,19 @@ from json import loads as jsondecode
 from os import listdir
 
 from werkzeug.utils import secure_filename
-
-from App.ext import FileConCtrl
-
 Markdown_block = Blueprint('Markdown_block', __name__)
 
-#-------------------------------
-# apiname: Markdown
+
+# -------------------------------
+# api name: Markdown
 # route: /v2.1/Markdown
 # method: GET POST PUT DELETE
 # GET: have no param or get limit param to return list of markdown directory json str
 #      with dir=['dir0','dir1','filename'] to get file con json str
-# POST: {dir=['dir0','dir1','filename'] filecon: jsonstr} add new file there or update exists file
-# PUT: {dir=['dir0','dir1','filename'] filecon: jsonstr} to update exists file
+# POST: {dir=['dir0','dir1','filename'] file con: jsonstr} add new file there or update exists file
+# PUT: {dir=['dir0','dir1','filename'] file con: jsonstr} to update exists file
 # DELETE: {dir=['dir0','dir1','filename']} to delete file
-#-----------------------------------
+# -----------------------------------
 
 @Markdown_block.route(
     '/v<float:version>/Markdown',
@@ -62,10 +60,6 @@ def get_post_res_list(version):
 @Markdown_block.route('/markdown')
 def test():
     return render_template('index_markdown.html', title1='mySync', title2='MD')
-
-
-
-
 
 # @Markdown_block.route(
 #     '/v<float:version>/Markdown/<resid_raw>',

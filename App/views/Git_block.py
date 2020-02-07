@@ -1,7 +1,7 @@
 from flask import Blueprint, request, abort
 
-from ..ext import DataArray
-from App.ext.GitRepoCtrl import GitRepoCtrl
+from App.libs import DataArray
+from App.libs import GitRepoCtrl
 
 import threading
 
@@ -18,7 +18,6 @@ gitlist_node = {
     'remote_addr': '',
     'local_addr': '',
     'branch': '',
-    'current_commit_id': '',
     'lastUpdateTime': '',
 }
 
@@ -28,15 +27,28 @@ gitrepolist = DataArray('data/GitRepos.json')
 def handle_repo():
     gitlist = [
         {
+            'status': 'disabled',
+            'repo_name': 'ifTheDoorOpen',
             'remote_addr': 'https://github.com/alone-wolf/ifTheDoorOpen.git',
-            'local_addr': './data'
+            'local_addr': './data',
+            'branch': 'master',
+            'last_update_time': '',
+            'last_check_time': ''
         },
         {
+            'status': 'enabled',
+            'repo_name': 'learn_doc_md',
             'remote_addr': 'https://github.com/alone-wolf/learn_doc_md.git',
-            'local_addr': './data'
+            'local_addr': './data',
+            'branch': 'master',
+            'last_update_time': '',
+            'last_check_time': ''
         }
     ]
     for i in gitlist:
+        if i['status'] == 'disabled':
+            print('repo {} disabled, but still exists for using'.format(i['repo_name']))
+            continue
         repo = GitRepoCtrl(i['remote_addr'], i['local_addr'])
         repo.ensureRepoUptodate()
     print('repo update done')

@@ -9,6 +9,8 @@
     - json
     - time
     - argparse
+    - flask-sqlalchemy
+    - flask-script
 
     tip for development:
 
