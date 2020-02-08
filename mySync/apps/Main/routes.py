@@ -1,6 +1,11 @@
-from flask import Blueprint, request, abort
+from flask import Blueprint
+from flask import request
+from flask import abort
+from flask import redirect
+from flask import url_for
 from flask import render_template
 
+from mySync.apps.Markdown.routes import Markdown_routes
 from mySync.common.ext import db
 
 main_routes = Blueprint('main_routes', __name__)
@@ -42,3 +47,7 @@ def test_error_page(errcode):
 def test_request():
     return render_template("test_request.html", title1="mySync", title2="testrequest")
 
+
+@main_routes.route('/MarkdownEditor')
+def MarkDownEditor():
+    return redirect('/v2.1/MarkdownEditor')

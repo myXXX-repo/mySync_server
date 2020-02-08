@@ -1,0 +1,103 @@
+{% extends "template.html" %}
+
+{% block addition_css %}
+<!-- <link href="/static/highlight.js/src/styles/rainbow.css" rel='stylesheet' /> -->
+<style>
+    ::-webkit-scrollbar {
+        /* display: none; */
+    }
+
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+        scroll-behavior: smooth;
+    }
+
+    #editor,
+    #content {
+        vertical-align: top;
+        display: inline-block;
+        min-width: 350px;
+        width: 49%;
+        height: 1000px;
+        /* height: 100%; */
+        padding: 7px;
+        /* border: solid 1px black; */
+    }
+
+    #editor_textarea,
+    #content_md {
+        height: 100%;
+        width: 100%;
+        border: solid 1px black;
+        padding: 5px;
+        scroll-behavior: smooth;
+        overflow-y: scroll;
+    }
+</style>
+{% endblock %}
+
+{% block addition_js %}
+<script src="http://112.5.37.138:51370/recrepo/marked/marked.min.js"></script>
+<!-- <script src="/static/highlight.js/src/highlight.js"></script> -->
+<script>
+    // axios.get('/v2.1/Markdown/test.md').then(function (response) {
+    //     document.getElementById('content_md').innerHTML =
+    //         marked(response.data);
+    //     $('table').attr('class', 'table table-hover');
+    //     // hljs.initHighlightingOnLoad();
+    // });
+    new Vue({
+        el: '#markdown',
+        data: {
+            markdown_data: ''
+        },
+        methods: {
+            markdown_to_html() {
+                let that = this;
+                document.getElementById('content_md').innerHTML = marked(this.markdown_data);
+                $('table').attr('class', 'table table-hover');
+            }
+        },
+        created(){
+            
+        },
+        mounted() {
+            let that = this;
+            axios.get('/v2.1/Markdown/test.md').then(function(response){
+                that.markdown_data = response.data;
+                that.markdown_to_html();
+            });
+            
+        }
+    });
+</script>
+{% endblock %}
+
+{% block body %}
+{% raw %}   
+<div id='markdown'>
+
+    
+    <form action="" method="POST" class="form-inline" role="form">
+    
+        <div class="form-group">
+            <!-- <label class="sr-only" for="">label</label> -->
+            <input type="email" class="form-control" id="" placeholder="File Name">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+    
+    <div id='editor'>
+        <textarea id='editor_textarea' v-model='markdown_data' @input=markdown_to_html></textarea>
+    </div>
+    <div id='content'>
+        <div id='content_md'>
+
+        </div>
+    </div>
+</div>
+{% endraw %}
+{% endblock %}

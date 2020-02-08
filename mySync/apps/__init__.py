@@ -1,12 +1,12 @@
-from mySync.apps.Git import Git_routes
-from mySync.apps.Main import main_routes
-from mySync.apps.Markdown import Markdown_routes
-from mySync.apps.Sticky import Sticky_routes
+from mySync.apps.Git import init_app_Git
+from mySync.apps.Main import init_app_Main
+from mySync.apps.Markdown import init_app_Markdown
+from mySync.apps.Sticky import init_app_Sticky
 
 
 def init_app(server):
-    server.register_blueprint(main_routes)
-    server.register_blueprint(Sticky_routes)
-    server.register_blueprint(Markdown_routes)
-    server.register_blueprint(Git_routes)
+    init_app_Git(server)
+    init_app_Main(server)
+    init_app_Markdown(server)
+    init_app_Sticky(server)
     return server
