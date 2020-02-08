@@ -2,11 +2,11 @@ from json import dumps as jsonencode
 # from flask import Flask
 
 
-def addroute(app):
+def addroute(server):
 
-    @app.route('/getroutes', methods=['GET'])
+    @server.route('/getroutes', methods=['GET'])
     def config_getroutes():
-        url_map = str(app.url_map)[5:-2]
+        url_map = str(server.url_map)[5:-2]
         url_map = url_map.split('<Rule')[1:]
         url_map_tmp = []
         for i in range(len(url_map) - 1):
@@ -32,4 +32,4 @@ def addroute(app):
             route.append(route_node)
         return jsonencode(route)
 
-    return app
+    return server

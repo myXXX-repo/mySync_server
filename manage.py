@@ -1,8 +1,8 @@
-from App import create_app
+from mySync import create_server
 from flask_script import Manager
 
-app = create_app()
-manager = Manager(app)
+server = create_server()
+manager = Manager(server)
 
 if __name__ == '__main__':
     manager.run()

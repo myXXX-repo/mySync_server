@@ -84,7 +84,7 @@ new Vue({
 //     data: {
 //         this_address: getCurrentAddress(),
 //         title: "Api Call Statistics",
-//         th: ['App Name', 'Api Name', 'Methods', 'Number Of Calls', 'Last Call Time', 'Operation'],
+//         th: ['mySync Name', 'Api Name', 'Methods', 'Number Of Calls', 'Last Call Time', 'Operation'],
 //         apis: []
 //     },
 //     methods: {

@@ -1,12 +1,11 @@
 from flask import Blueprint, request, abort
-from flask import render_template
-from App.libs import DataArray
+from mySync.common.libs import DataArray
 from json import dumps as jsonencode
 
-Sticky_block = Blueprint('Sticky_block', __name__)
+Sticky_routes = Blueprint('Sticky_routes', __name__)
 
 
-@Sticky_block.route(
+@Sticky_routes.route(
     '/v<float:version>/Sticky',
     methods=['GET', 'POST', 'DELETE'])
 def get_post_res_list(version):
@@ -64,7 +63,7 @@ def get_post_res_list(version):
         return abort(404)
 
 
-@Sticky_block.route(
+@Sticky_routes.route(
     '/v<float:version>/Sticky/<int:resid_raw>',
     methods=['GET', 'PUT', 'PATH', 'DELETE'])
 def get_put_path_res_by_id(version, resid_raw):

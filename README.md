@@ -2,7 +2,7 @@
 
 ### environment requirement
 
-    python3
+    >= python3.5
 
     - flask
     - os
@@ -20,23 +20,27 @@
 
 ### directory tree
 
-    +--App/
-    |   +--ext/
+    +--mySync/
+    |   +--apps/ (locate apps)
+    |   |   +--Git
+    |   |   +--Markdown
+    |   |   +--Sticky
+    |   |   +--Main
+    |   +--common/ (common libs)
     |   |   +--__init__.py
-    |   |   +--FileConCtrl.py
-    |   |   +--DataArray.py
-    |   |   +--GitRepoCtrl.py
-    |   +--models/
+    |   |   +--libs.py
+    |   |   +--ext.py
+    |   +--config/ (server config)
     |   |   +--__init__.py
-    |   +--views/
-    |   |   +--...
-    |   +--templates/
+    |   |   +--errorpage.py
+    |   +--templates/ (view page templates)
     |   |   +--template.html
     |   |   +--temp.html
     |   |   +--index.html
-    +--data/ (auto create)
+    |   +--static/ (static files for templates)
+    |   |   +--...
+    +--data/ (store data, auto create)
     |   +--markdown/
-    |   +--sticky.json
     +--manage.py
 
 ### server usage

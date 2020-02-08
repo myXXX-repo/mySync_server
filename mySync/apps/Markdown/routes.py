@@ -5,7 +5,7 @@ from json import loads as jsondecode
 from os import listdir
 
 from werkzeug.utils import secure_filename
-Markdown_block = Blueprint('Markdown_block', __name__)
+Markdown_routes = Blueprint('Markdown_routes', __name__)
 
 
 # -------------------------------
@@ -19,7 +19,7 @@ Markdown_block = Blueprint('Markdown_block', __name__)
 # DELETE: {dir=['dir0','dir1','filename']} to delete file
 # -----------------------------------
 
-@Markdown_block.route(
+@Markdown_routes.route(
     '/v<float:version>/Markdown',
     methods=['GET', 'POST', 'DELETE'])
 def get_post_res_list(version):
@@ -57,7 +57,7 @@ def get_post_res_list(version):
         return abort(405)
 
 
-@Markdown_block.route('/markdown')
+@Markdown_routes.route('/markdown')
 def test():
     return render_template('index_markdown.html', title1='mySync', title2='MD')
 

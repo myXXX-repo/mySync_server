@@ -1,13 +1,13 @@
 from flask import Blueprint, request, abort
 
-from App.libs import DataArray
-from App.libs import GitRepoCtrl
+from mySync.apps.Git.libs import GitRepoCtrl
 
 import threading
 
 # from json import dumps as jsonencode
+from mySync.apps.Git.models import Git
 
-Git_block = Blueprint('Git_block', __name__)
+Git_routes = Blueprint('Git_routes', __name__)
 
 dataPath = 'data/'
 
@@ -21,7 +21,7 @@ gitlist_node = {
     'lastUpdateTime': '',
 }
 
-gitrepolist = DataArray('data/GitRepos.json')
+# gitrepolist = DataArray('data/GitRepos.json')
 
 
 def handle_repo():
@@ -54,14 +54,14 @@ def handle_repo():
     print('repo update done')
 
 
-@Git_block.route('/Git/ensureuptodate')
+@Git_routes.route('/Git/ensureuptodate')
 def index():
     th = threading.Thread(target=handle_repo)
     th.start()
     return 'cmd recived'
 
 
-@Git_block.route('/v<float:version>/Git', methods=['GET', 'POST', 'DELETE'])
+@Git_routes.route('/v<float:version>/Git', methods=['GET', 'POST', 'DELETE'])
 def gitCtrl(version):
     if version == 1.0:
         return abort(404)
@@ -83,7 +83,7 @@ def gitCtrl(version):
         return abort(404)
 
 
-@Git_block.route('/v<float:version>/Git/<reponame>', methods=['GET', 'POST', 'DELETE'])
+@Git_routes.route('/v<float:version>/Git/<reponame>', methods=['GET', 'POST', 'DELETE'])
 def gitrepoCtrl(version, reponame):
     if version == 1.0:
         return abort(404)
@@ -103,3 +103,12 @@ def gitrepoCtrl(version, reponame):
             return abort(405)
     else:
         return abort(404)
+
+
+# test
+@Git_routes.route('/Git/addgit')
+def test():
+    gitrepo = Git()
+    gitrepo.repo_name = 'aaa'
+    gitrepo.add_save()
+    return 'add done'

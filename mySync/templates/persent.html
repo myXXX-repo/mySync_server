@@ -1,0 +1,28 @@
+{% extends "template.html" %}
+
+{% block addition_css %}
+{% endblock %}
+
+{% block addition_js %}
+    <script>
+    new Vue({
+        el:'#progress',
+        data:{
+            per:75
+        },
+        mounted(){
+            document.getElementById('progress_bar').setAttribute('style','width:'+this.per+'%;')
+        }
+    });
+    </script>
+{% endblock %}
+{% block body %}
+    {% raw %}
+    <div class="progress" id="progress">
+        <div class="progress-bar" role="progressbar" id = 'progress_bar'>{{ per }} %</div>
+    </div>
+{% endraw %}
+{% endblock %}
+
+{% block foot %}
+{% endblock %}

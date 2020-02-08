@@ -2,6 +2,7 @@ from json import dumps as jsonencode
 from json import loads as jsondecode
 import os
 
+
 class FileConCtrl:  # ctrl file
     def __init__(self, filePath, fileFolder='data'):
         if os.path.exists(fileFolder):
