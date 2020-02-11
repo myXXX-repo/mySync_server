@@ -80,6 +80,16 @@ new Vue({
 });
 
 // new Vue({
+//             el: '#progress',
+//             data: {
+//                 per: 75
+//             },
+//             mounted() {
+//                 document.getElementById('progress_bar').setAttribute('style', 'width:' + this.per + '%;')
+//             }
+//         });
+
+// new Vue({
 //     el: "#Statistics_panel",
 //     data: {
 //         this_address: getCurrentAddress(),

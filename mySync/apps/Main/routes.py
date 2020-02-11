@@ -13,7 +13,7 @@ main_routes = Blueprint('main_routes', __name__)
 
 @main_routes.route('/')
 def index():
-    return render_template('index.html', title1='mySync', title2='index')
+    return render_template('index.html', title1='mySync', title2='index',per=20)
 
 
 @main_routes.route('/persent')
@@ -47,7 +47,3 @@ def test_error_page(errcode):
 def test_request():
     return render_template("test_request.html", title1="mySync", title2="testrequest")
 
-
-@main_routes.route('/MarkdownEditor')
-def MarkDownEditor():
-    return redirect('/v2.1/MarkdownEditor')

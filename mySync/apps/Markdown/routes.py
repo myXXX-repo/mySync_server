@@ -14,17 +14,17 @@ from werkzeug.utils import secure_filename
 
 Markdown_routes = Blueprint('Markdown_routes', __name__)
 
-MARKDOWN_FOLDER = 'data/'
+MARKDOWN_FOLDER = 'data/markdown/'
 
 
 # html
-@Markdown_routes.route('/v<float:version>/MarkdownIndex')
-def Markdown_index(version):
+@Markdown_routes.route('/MarkdownIndex')
+def Markdown_index():
     return render_template('index_markdown.html', title1='Markdown', title2='Index')
 
 
-@Markdown_routes.route('/v<float:version>/MarkdownEditor')
-def Markdown_editor(version):
+@Markdown_routes.route('/MarkdownEditor')
+def Markdown_editor():
     return render_template('markdown_editor.html', title1='Markdown', title2='Editor')
 
 

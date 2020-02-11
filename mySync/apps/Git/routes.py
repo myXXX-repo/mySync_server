@@ -5,21 +5,20 @@ from mySync.apps.Git.libs import GitRepoCtrl
 import threading
 
 # from json import dumps as jsonencode
-from mySync.apps.Git.models import Git
+from mySync.apps.Git.models import Git, db_insert
 
 Git_routes = Blueprint('Git_routes', __name__)
 
-dataPath = 'data/'
 
-gitlistfilename = 'Gitlist.json'
+# GIT_FOLDER = 'data/'
 
-gitlist_node = {
-    'reponame': '',
-    'remote_addr': '',
-    'local_addr': '',
-    'branch': '',
-    'lastUpdateTime': '',
-}
+# gitlist_node = {
+#     'reponame': '',
+#     'remote_addr': '',
+#     'local_addr': '',
+#     'branch': '',
+#     'lastUpdateTime': '',
+# }
 
 # gitrepolist = DataArray('data/GitRepos.json')
 
@@ -30,7 +29,7 @@ def handle_repo():
             'status': 'disabled',
             'repo_name': 'ifTheDoorOpen',
             'remote_addr': 'https://github.com/alone-wolf/ifTheDoorOpen.git',
-            'local_addr': './data',
+            'local_addr': 'data/',
             'branch': 'master',
             'last_update_time': '',
             'last_check_time': ''
@@ -39,7 +38,7 @@ def handle_repo():
             'status': 'enabled',
             'repo_name': 'learn_doc_md',
             'remote_addr': 'https://github.com/alone-wolf/learn_doc_md.git',
-            'local_addr': './data',
+            'local_addr': 'data/markdown/',
             'branch': 'master',
             'last_update_time': '',
             'last_check_time': ''
@@ -108,7 +107,24 @@ def gitrepoCtrl(version, reponame):
 # test
 @Git_routes.route('/Git/addgit')
 def test():
-    gitrepo = Git()
-    gitrepo.repo_name = 'aaa'
-    gitrepo.add_save()
+    request_data = request.form.to_dict()
+
+    if len(request_data) != set(request_data):
+        print("got repeated keys")
+        return abort(400)
+
+    keys = ['repo_name', 'remote_addr', 'local_addr', 'branch', 'depth']
+    for key in keys:
+        if key not in request_data:
+            print("got missing key(s)")
+            return abort(400)
+        if request_data[key] == "":
+            print("got missing value(s)")
+            return abort(400)
+
+    db_insert(request_data['repo_name'],
+              request_data['remote_addr'],
+              request_data['local_addr'],
+              request_data['branch'],
+              request_data['depth'])
     return 'add done'

@@ -3,7 +3,7 @@ let ensure_2 = function (num) {
         num = "0" + num;
     }
     return num;
-}
+};
 
 let getFormatedDateTime = function () {
     const date = new Date();
@@ -14,10 +14,10 @@ let getFormatedDateTime = function () {
     const min = ensure_2(date.getMinutes());
     const sec = ensure_2(date.getSeconds());
     return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
-}
+};
 
 
-let input_panel = new Vue({
+new Vue({
     el: "#sticky_panel",
     data: {
         title: "Default Title",
@@ -34,7 +34,7 @@ let input_panel = new Vue({
             let that = this;
             axios({
                 method: "post",
-                url: "/v2/Sticky/add",
+                url: "/v2.1/Sticky",
                 params: {
                     title: that.title,
                     con: that.con,
@@ -66,8 +66,8 @@ let input_panel = new Vue({
         onBtnClearClick() {
             let that = this;
             axios({
-                method: "get",
-                url: "/v2/Sticky/clear"
+                method: "delete",
+                url: "/v2.1/Sticky"
             }).then(function (response) {
                 that.getData();
             }).catch(function (err) {
@@ -78,11 +78,8 @@ let input_panel = new Vue({
         delstickybyid(id) {
             let that = this;
             axios({
-                method: "get",
-                url: "/v2/Sticky/del",
-                params: {
-                    'id': id
-                }
+                method: "delete",
+                url: "/v2.1/Sticky/"+id,
             }).then(function (response) {
                 console.log(response.data);
                 that.getData();
@@ -91,21 +88,21 @@ let input_panel = new Vue({
             });
         },
         getData() {
-            let that = this;
-            axios({
-                method: 'get',
-                url: "/v2/Sticky/get"
-            }).then(function (response) {
-                that.sticky_list = response.data;
-            }).catch(function (err) {
-                console.log(err);
-            });
-            axios({
-                method: 'get',
-                url: "/getip"
-            }).then(function (response) {
-                that.ip = response.data;
-            });
+            // let that = this;
+            // axios({
+            //     method: 'get',
+            //     url: "/v2.1/Sticky"
+            // }).then(function (response) {
+            //     that.sticky_list = response.data;
+            // }).catch(function (err) {
+            //     console.log(err);
+            // });
+            // axios({
+            //     method: 'get',
+            //     url: "/getip"
+            // }).then(function (response) {
+            //     that.ip = response.data;
+            // });
         },
     },
     created() {
@@ -114,7 +111,7 @@ let input_panel = new Vue({
         this.getData();
     },
     mounted() {
-        this.getData();
-        $('#con').focus();
+        // this.getData();
+        // $('#con').focus();
     }
 });

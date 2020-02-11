@@ -1,15 +1,40 @@
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, render_template
+
+from mySync.apps.Sticky.models import Sticky, db_insert
 from mySync.common.libs import DataArray
 from json import dumps as jsonencode
 
 Sticky_routes = Blueprint('Sticky_routes', __name__)
 
 
+# def db_delete(key,value):
+#     pass
+#
+# def db_update(data=[]):
+#     pass
+#
+# def db_show():
+#     pass
+
+@Sticky_routes.route('/StickyIndex')
+def StickyIndex():
+    return render_template('index_sticky.html', title1='Sticky', title2='Index')
+
+
+@Sticky_routes.route('/Sticky/test/<cmd>')
+def sticky_test(cmd):
+    if cmd == 'addsticky':
+        db_insert('t', 'c', 't', 'd', 'i')
+        return 'add done'
+    else:
+        return abort(404)
+
+
 @Sticky_routes.route(
     '/v<float:version>/Sticky',
     methods=['GET', 'POST', 'DELETE'])
 def get_post_res_list(version):
-    sticky = DataArray('data/Sticky.json')
+    # sticky = DataArray('data/Sticky.json')
 
     if version == 1.0:
         return abort(410)
@@ -29,7 +54,7 @@ def get_post_res_list(version):
             request_data = request.args.to_dict()  # 用于保存获取数据的过滤
 
             if 'limit' in request_data:
-                sticky_data = sticky.dataArray
+                # sticky_data = sticky.dataArray
                 limit = 0
                 try:
                     limit = int(request_data['limit'])
@@ -37,28 +62,35 @@ def get_post_res_list(version):
                     print(err)
                     return abort(400)
 
-                data_to_return = sticky_data[0:int(limit)]
+                # data_to_return = sticky_data[0:int(limit)]
             else:
-                data_to_return = sticky.dataArray
-            return jsonencode(data_to_return)
+                pass
+                # data_to_return = sticky.dataArray
+            # return jsonencode(data_to_return)
 
         # POST: 添加资源
         elif access_method == 'POST':
             request_data = request.values.to_dict()
-            keylist = ['title', 'con', 'time', 'devName', 'ip']
-            if 'title' in request_data:
-                if 'con' in request_data:
-                    if 'time' in request_data:
-                        if 'devName' in request_data:
-                            if 'ip' in request_data:
-                                newdata = {
-                                    keylist[i]: request_data[keylist[i]] for i in range(len(keylist))}
-                                sticky.add(newdata)
-                                return "Success"
-            return "error get wrong data"
+
+            if len(request_data) != set(request_data):
+                print("got repeated keys")
+                return abort(400)
+
+            keys = ['title', 'con', 'time', 'devName', 'ip']
+            for key in keys:
+                if key not in request_data:
+                    print("got missing key(s)")
+                    return abort(400)
+            db_insert(title=request_data['title'],
+                      con=request_data['con'],
+                      time=request_data['time'],
+                      devName=request_data['devName'],
+                      ip=request_data['ip'])
+            return "Success"
+
         elif access_method == 'DELETE':
-            sticky.dataArray = []
-            return str(sticky.dataArray)
+            # delete all
+            pass
     else:
         return abort(404)
 

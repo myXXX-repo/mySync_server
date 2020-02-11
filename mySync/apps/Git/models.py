@@ -15,3 +15,13 @@ class Git(db.Model):
     def add_save(self):
         db.session.add(self)
         db.session.commit()
+
+
+def db_insert(repo_name, remote_addr, local_addr, branch, depth):
+    git = Git()
+    git.repo_name = repo_name
+    git.remote_addr = remote_addr
+    git.local_addr = local_addr
+    git.branch = branch
+    git.depth = depth
+    git.add_save()

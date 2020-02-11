@@ -15,7 +15,7 @@ class GitRepoCtrl:
         self.git_cmd_clone = 'git clone {} -b {} --depth {}'.format(
             remote_addr, branch, depth)
         self.git_cmd_gotolocation = 'cd {}'.format(locate_path)
-        self.git_cmd_gotorepo = 'cd {}/{}'.format(locate_path, self.reponame)
+        self.git_cmd_gotorepo = 'cd {}{}'.format(locate_path, self.reponame)
         self.git_cmd_fetch = 'git fetch'
         self.git_cmd_status = 'git status'
         self.git_cmd_createtmpbranch = 'git branch tmptmptmp'
