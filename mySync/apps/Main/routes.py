@@ -1,24 +1,36 @@
 from flask import Blueprint
 from flask import request
 from flask import abort
+from functools import wraps
 from flask import redirect
 from flask import url_for
 from flask import render_template
 
 from mySync.apps.Markdown.routes import Markdown_routes
+from mySync.common.access_token_check import check_access_token
 from mySync.common.ext import db
+from mySync.config.settings import settings
+from hmac import compare_digest
 
 main_routes = Blueprint('main_routes', __name__)
 
 
+# def check_access_token(func: callable):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         if "access_token" not in request.headers:
+#             return abort(401)
+#         if request.headers.get("access_token") != settings.ACCESS_TOKEN:
+#             return abort(401)
+#
+#         return func(*args, **kwargs)
+#
+#     return wrapper
+
+
 @main_routes.route('/')
 def index():
-    return render_template('index.html', title1='mySync', title2='index',per=20)
-
-
-@main_routes.route('/persent')
-def persent():
-    return render_template('persent.html', title1='mySync', title2='persent')
+    return render_template('index.html', title1='mySync', title2='index', per=20)
 
 
 @main_routes.route('/getip')
@@ -47,3 +59,8 @@ def test_error_page(errcode):
 def test_request():
     return render_template("test_request.html", title1="mySync", title2="testrequest")
 
+
+@main_routes.route('/test/token')
+@check_access_token
+def test_token():
+    return "access token checked"

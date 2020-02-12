@@ -4,8 +4,8 @@ from mySync.apps.Git.libs import GitRepoCtrl
 
 import threading
 
-# from json import dumps as jsonencode
-from mySync.apps.Git.models import Git, db_insert
+from json import dumps as jsonencode
+from mySync.apps.Git.models import db_insert, Git
 
 Git_routes = Blueprint('Git_routes', __name__)
 
@@ -60,7 +60,7 @@ def index():
     return 'cmd recived'
 
 
-@Git_routes.route('/v<float:version>/Git', methods=['GET', 'POST', 'DELETE'])
+@Git_routes.route('/v<float:version>/Git', methods=['GET', 'POST', 'PATH', 'DELETE'])
 def gitCtrl(version):
     if version == 1.0:
         return abort(404)
@@ -71,8 +71,55 @@ def gitCtrl(version):
         access_method = request.method
 
         if access_method == 'GET':
-            pass
+            # db_show()
+            repos = []
+            gitrepos = Git.query.all()
+            for gitrepo in gitrepos:
+                repo = [gitrepo.repo_name,
+                        gitrepo.remote_addr,
+                        gitrepo.local_addr,
+                        gitrepo.branch,
+                        gitrepo.depth,
+                        gitrepo.enabled,
+                        gitrepo.last_check_time,
+                        gitrepo.last_update_time]
+                repos.append(repo)
+
+            return jsonencode(repos)
+
+        # ----------------------
+        # app name: Git
+        # route: /v2.1/Git
+        # method: POST
+        # params:
+        #       repo_name null
+        #       remote_addr null
+        #       local_addr data/
+        #       branch master
+        #       depth 1
+        # -------------------------
         elif access_method == 'POST':
+            request_data = request.form.to_dict()
+
+            if len(request_data) != set(request_data):
+                print("got repeated keys")
+                return abort(400)
+
+            keys = ['repo_name', 'remote_addr', 'local_addr', 'branch', 'depth']
+            for key in keys:
+                if key not in request_data:
+                    print("got missing key(s)")
+                    return abort(400)
+                if request_data[key] == "":
+                    print("got missing value(s)")
+                    return abort(400)
+
+            db_insert(request_data['repo_name'],
+                      request_data['remote_addr'],
+                      request_data['local_addr'],
+                      request_data['branch'],
+                      request_data['depthz'])
+            return 'add done'
             pass
         elif access_method == 'DELETE':
             pass
@@ -126,5 +173,5 @@ def test():
               request_data['remote_addr'],
               request_data['local_addr'],
               request_data['branch'],
-              request_data['depth'])
+              request_data['depthz'])
     return 'add done'

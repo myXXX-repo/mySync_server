@@ -12,9 +12,11 @@ from os.path import isfile
 
 from werkzeug.utils import secure_filename
 
+from mySync.config import settings
+
 Markdown_routes = Blueprint('Markdown_routes', __name__)
 
-MARKDOWN_FOLDER = 'data/markdown/'
+MARKDOWN_FOLDER = settings.MARKDOWN_FOLDER
 
 
 # html

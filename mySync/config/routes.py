@@ -2,7 +2,7 @@ from json import dumps as jsonencode
 # from flask import Flask
 
 
-def getroute(server):
+def add_route_getroutes(server):
 
     @server.route('/getroutes', methods=['GET'])
     def config_getroutes():

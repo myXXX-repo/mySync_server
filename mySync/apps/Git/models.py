@@ -23,5 +23,15 @@ def db_insert(repo_name, remote_addr, local_addr, branch, depth):
     git.remote_addr = remote_addr
     git.local_addr = local_addr
     git.branch = branch
-    git.depth = depth
+    git.depth = int(depth)
+    git.enabled = True
+    git.last_update_time = "null"
+    git.last_check_time = "null"
     git.add_save()
+
+
+def db_show(limit=0):
+    git = Git()
+    if limit != 0:
+        pass
+    pass

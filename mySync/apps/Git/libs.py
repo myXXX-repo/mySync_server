@@ -2,7 +2,7 @@ import os
 
 
 class GitRepoCtrl:
-    def __init__(self, remote_addr, locate_path='.', branch='master', depth=1):
+    def __init__(self, remote_addr, locate_path='./data', branch='master', depth=1):
         # repo config
         self.remote_addr = remote_addr
         self.reponame = remote_addr.split('/')[-1].split('.')[0]
@@ -18,11 +18,11 @@ class GitRepoCtrl:
         self.git_cmd_gotorepo = 'cd {}{}'.format(locate_path, self.reponame)
         self.git_cmd_fetch = 'git fetch'
         self.git_cmd_status = 'git status'
-        self.git_cmd_createtmpbranch = 'git branch tmptmptmp'
-        self.git_cmd_checkouttmpbranch = 'git checkout tmptmptmp'
+        # self.git_cmd_createtmpbranch = 'git branch tmptmptmp'
+        # self.git_cmd_checkouttmpbranch = 'git checkout tmptmptmp'
         self.git_cmd_pull = 'git pull'
-        self.git_cmd_checkoutdefaultbranch = 'git checkout {}'.format(branch)
-        self.git_cmd_deltmpbranch = 'git branch -D tmptmptmp'
+        # self.git_cmd_checkoutdefaultbranch = 'git checkout {}'.format(branch)
+        # self.git_cmd_deltmpbranch = 'git branch -D tmptmptmp'
 
         # tips
         self.judge_uptodate = 'Your branch is up to date with'
