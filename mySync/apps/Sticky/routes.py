@@ -77,6 +77,7 @@ def get_post_res_list(version):
                 }
             ]})
 
+
         # POST: 添加资源
         elif access_method == 'POST':
             request_data = request.values.to_dict()
