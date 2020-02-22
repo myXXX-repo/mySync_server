@@ -4,3 +4,8 @@ class settings:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MARKDOWN_FOLDER = "data/markdown/"
+
+
+
+    VISITCOUNTER_TABLENAME = "visit_counter"
+
