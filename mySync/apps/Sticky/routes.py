@@ -53,6 +53,8 @@ def get_post_res_list(version):
             data_to_return = []
             request_data = request.args.to_dict()  # 用于保存获取数据的过滤
 
+
+
             if 'limit' in request_data:
                 # sticky_data = sticky.dataArray
                 limit = 0
@@ -67,6 +69,13 @@ def get_post_res_list(version):
                 pass
                 # data_to_return = sticky.dataArray
             # return jsonencode(data_to_return)
+
+            return jsonencode({'data': [
+                {
+                    'title': "this is title",
+                    'con': "this is con"
+                }
+            ]})
 
         # POST: 添加资源
         elif access_method == 'POST':
