@@ -30,45 +30,57 @@ new Vue({
             list: [{
                 api_name: "index",
                 method: "GET",
-                routes: "/v2/Sticky",
+                routes: "/StickyIndex",
                 details: "have no upload data display index page"
             },
                 {
                     api_name: "get sticky",
                     method: "GET",
-                    routes: "/v2/Sticky/get",
-                    details: "send request:<br>GET: ?id=1&id=2<br>POST: json array string [1,2]<br>auth: header with AuthKey and DevName<br>return: json array string<br>for one or multilines"
+                    routes: "/v2.1/Sticky",
+                    details: ""
                 },
                 {
-                    api_name: "add sticky",
+                    api_name: "post sticky",
                     method: "POST",
-                    routes: "/v2/Sticky/add",
-                    details: "send request:<br>GET: ?title=TITLE&con=CON for one line<br>POST: json string [['title','con'],['title','con']] for multilines<br>auth: header with AuthKey and DevName<br>return: 1 or 0"
+                    routes: "/v2.1/Sticky",
+                    details: ""
                 },
                 {
-                    api_name: "del sticky",
-                    method: "GET",
-                    routes: "/v2/Sticky/del",
-                    details: "send request:<br>GET: ?id=1&id=2&id=3<br>post json array string: [1,2,3]<br>auth: header with AuthKey and DevName"
+                    api_name: "del all sticky",
+                    method: "DELETE",
+                    routes: "/v2.1/Sticky",
+                    details: "must set auth"
                 },
                 {
-                    api_name: "clear sticky",
+                    api_name: "get aimed sticky",
                     method: "GET",
-                    routes: "/v2/Sticky/clear",
+                    routes: "/v2.1/Sticky/int:resid",
+                    details: ""
+                },
+                {
+                    api_name: "update/cover aimed sticky",
+                    method: "PUT PATH",
+                    routes: "/v2.1/Sticky/int:resid",
+                    details: ""
+                },
+                {
+                    api_name: "delete aimed sticky",
+                    method: "DELETE",
+                    routes: "/v2.1/Sticky/int:resid",
                     details: ""
                 }
             ]
         },
-            {
-                title: "statistics",
-                show_list: toBool(localStorage.getItem('api_list_show_statistics')),
-                list: [{
-                    api_name: "statistics",
-                    method: "GET",
-                    routes: "/statistics",
-                    details: ""
-                },]
-            }
+            // {
+            //     title: "statistics",
+            //     show_list: toBool(localStorage.getItem('api_list_show_statistics')),
+            //     list: [{
+            //         api_name: "statistics",
+            //         method: "GET",
+            //         routes: "/statistics",
+            //         details: ""
+            //     },]
+            // }
         ]
     },
     methods: {

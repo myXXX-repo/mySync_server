@@ -68,34 +68,34 @@
 
     <hr>
 
-    <div class="panel panel-default" id="Statistics_panel">
-        <div class="panel-heading" @click=initStatisticsData()>
-            <h3 class="panel-title">{{title}}</h3>
-        </div>
-        <div class="panel-body" id="display">
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>{{th[0]}}</th>
-                    <th>{{th[1]}}</th>
-                    <th>{{th[2]}}</th>
-                    <th>{{th[3]}}</th>
-                    <th>{{th[4]}}</th>
-                    <!-- <th>{{th[5]}}</th> -->
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="item in apis">
-                    <td>{{item.appname}}</td>
-                    <td>{{item.apiname}}</td>
-                    <td>{{item.method}}</td>
-                    <td>{{item.NumOfCall}}</td>
-                    <td>{{item.LastCallTime}}</td>
-                    <!-- <td><a href="#">set to zero</a></td> -->
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<!--    <div class="panel panel-default" id="Statistics_panel">-->
+<!--        <div class="panel-heading" @click=initStatisticsData()>-->
+<!--            <h3 class="panel-title">{{title}}</h3>-->
+<!--        </div>-->
+<!--        <div class="panel-body" id="display">-->
+<!--            <table class="table table-bordered table-hover">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th>{{th[0]}}</th>-->
+<!--                    <th>{{th[1]}}</th>-->
+<!--                    <th>{{th[2]}}</th>-->
+<!--                    <th>{{th[3]}}</th>-->
+<!--                    <th>{{th[4]}}</th>-->
+<!--                    &lt;!&ndash; <th>{{th[5]}}</th> &ndash;&gt;-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr v-for="item in apis">-->
+<!--                    <td>{{item.appname}}</td>-->
+<!--                    <td>{{item.apiname}}</td>-->
+<!--                    <td>{{item.method}}</td>-->
+<!--                    <td>{{item.NumOfCall}}</td>-->
+<!--                    <td>{{item.LastCallTime}}</td>-->
+<!--                    &lt;!&ndash; <td><a href="#">set to zero</a></td> &ndash;&gt;-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
     {% endraw %}
 {% endblock %}
