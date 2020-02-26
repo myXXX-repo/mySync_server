@@ -44,8 +44,6 @@ def get_post_res_list(version):
             data_to_return = []
             request_data = request.args.to_dict()  # 用于保存获取数据的过滤
 
-
-
             if 'limit' in request_data:
                 # sticky_data = sticky.dataArray
                 limit = 0
@@ -64,8 +62,21 @@ def get_post_res_list(version):
             return jsonencode({'data': [
                 {
                     'title': "this is title",
-                    'con': "this is con"
-                }
+                    'con': "this is con",
+                    'type': "RealSticky"
+                }, {
+                    'title': "this is title",
+                    'con': "this is con",
+                    'type': "RealSticky"
+                }, {
+                    'title': "this is title",
+                    'con': "this is con",
+                    'type': "TODO"
+                }, {
+                    'title': "this is title",
+                    'con': "this is con",
+                    'type': "Tabs"
+                },
             ]})
 
 
