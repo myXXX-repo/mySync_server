@@ -10,8 +10,9 @@ from mySync.common.ext import init_ext
 def create_server():
     server = Flask(__name__)
 
-    init_config(server)
+    server = init_config(server)
 
     init_ext(server)  # sql ctrl
     init_app(server)
+
     return server

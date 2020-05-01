@@ -2,7 +2,7 @@ from flask import Blueprint, request, abort, render_template
 
 from mySync.apps.Sticky.models import Sticky, db_insert
 from mySync.common.libs import DataArray
-from json import dumps as jsonencode
+from json import dumps as json_encode
 
 Sticky_routes = Blueprint('Sticky_routes', __name__)
 
@@ -59,7 +59,7 @@ def get_post_res_list(version):
                 # data_to_return = sticky.dataArray
             # return jsonencode(data_to_return)
 
-            return jsonencode({'data': [
+            return json_encode({'data': [
                 {
                     'title': "this is title",
                     'con': "this is con",
@@ -96,7 +96,7 @@ def get_post_res_list(version):
             db_insert(title=request_data['title'],
                       con=request_data['con'],
                       time=request_data['time'],
-                      devName=request_data['devName'],
+                      dev_name=request_data['devName'],
                       ip=request_data['ip'])
             return "Success"
 
@@ -134,7 +134,7 @@ def get_put_path_res_by_id(version, resid_raw):
 
         # GET: 返回json格式的一条数据
         if access_method == 'GET':
-            return jsonencode(sticky.dataArray)
+            return json_encode(sticky.dataArray)
 
         # PUT: 收到完整的数据 覆盖制定id数据
         elif access_method == 'PUT' or access_method == 'PATH':

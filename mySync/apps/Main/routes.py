@@ -30,6 +30,7 @@ main_routes = Blueprint('main_routes', __name__)
 
 @main_routes.route('/')
 def index():
+    db.create_all()
     return render_template('index.html', title1='mySync', title2='index', per=20)
 
 

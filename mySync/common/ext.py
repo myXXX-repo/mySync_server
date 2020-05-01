@@ -5,5 +5,3 @@ db = SQLAlchemy()
 
 def init_ext(app):
     db.init_app(app)
-
-
