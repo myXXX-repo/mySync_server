@@ -114,20 +114,20 @@ def del_all_data():
 @ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>/delete', methods=['DELETE'])
 def del_data_by_app_name(app_name):
     del_one_by_app_name(app_name)
-    return len(get_data_by_app_name(app_name))
+    return "del "+app_name+" all data done"
 
 
-def itemInDB(data_all, data_item):
-    data_all_app_name = []
-    data_all_data_key = []
-    for i in data_all:
-        data_all_app_name.append(i['app_name'])
-        data_all_data_key.append(i['data_key'])
-
-    if data_item['app_name'] not in data_all_app_name:
-        return False
-    elif data_item['data_key'] not in data_all_data_key:
-        return False
-    else:
-        # update data
-        return True
+# def itemInDB(data_all, data_item):
+#     data_all_app_name = []
+#     data_all_data_key = []
+#     for i in data_all:
+#         data_all_app_name.append(i['app_name'])
+#         data_all_data_key.append(i['data_key'])
+#
+#     if data_item['app_name'] not in data_all_app_name:
+#         return False
+#     elif data_item['data_key'] not in data_all_data_key:
+#         return False
+#     else:
+#         # update data
+#         return True
