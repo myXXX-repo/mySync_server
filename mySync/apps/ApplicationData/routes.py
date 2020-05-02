@@ -31,24 +31,30 @@ def test():
     return "server is fine"
 
 
-# get全部数据
+# get delete 全部数据
 @ApplicationData_routes.route('/app/ApplicationData/v1.0', methods=['GET'])
-def get_all_data():
-    data_all = []
-    for i in get_all():
-        data = {
-            "id": i.id,
-            "app_name": i.app_name,
-            "key_value": i.key_value,
-            "create_time": i.create_time,
-            "update_time": i.update_time
-        }
-        data_all.append(data)
-    return json_encode(data_all)
+def get_delete_all_data():
+    request_method = request.method
+    if request_method == 'GET':
+        data_all = []
+        for i in get_all():
+            data = {
+                "id": i.id,
+                "app_name": i.app_name,
+                "key_value": i.key_value,
+                "create_time": i.create_time,
+                "update_time": i.update_time
+            }
+            data_all.append(data)
+        return json_encode(data_all)
+    elif request_method == 'DELETE':
+        del_all()
+        return "del all done"
 
 
-@ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>', methods=['GET', 'POST'])
-def get_post_data(app_name):
+# get post delete 指定app的全部数据
+@ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>', methods=['GET', 'POST', 'DELETE'])
+def get_post_delete_data(app_name):
     if app_name not in allowed_app_name:
         print(app_name)
         abort(403)
@@ -103,19 +109,21 @@ def get_post_data(app_name):
 
             add_ones([app_data])
         return msg
+    elif request_method == 'DELETE':
+        del_one_by_app_name(app_name=app_name)
+        return "del " + app_name + " all data done"
 
 
-@ApplicationData_routes.route('/app/ApplicationData/v1.0/delete', methods=['DELETE'])
-def del_all_data():
-    del_all()
-    return "del all done"
-
-
-@ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>/delete', methods=['DELETE'])
-def del_data_by_app_name(app_name):
-    del_one_by_app_name(app_name)
-    return "del "+app_name+" all data done"
-
+# @ApplicationData_routes.route('/app/ApplicationData/v1.0/delete', methods=['DELETE'])
+# def del_all_data():
+#     del_all()
+#     return "del all done"
+#
+#
+# @ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>/delete', methods=['DELETE'])
+# def del_data_by_app_name(app_name):
+#     del_one_by_app_name(app_name)
+#     return "del " + app_name + " all data done"
 
 # def itemInDB(data_all, data_item):
 #     data_all_app_name = []
