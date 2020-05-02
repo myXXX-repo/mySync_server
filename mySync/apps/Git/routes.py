@@ -6,6 +6,7 @@ import threading
 
 from json import dumps as jsonencode
 from mySync.apps.Git.models import db_insert, Git
+from mySync.common.access_token_check import check_access_token
 
 Git_routes = Blueprint('Git_routes', __name__)
 
@@ -53,15 +54,17 @@ def handle_repo():
     print('repo update done')
 
 
-@Git_routes.route('/Git/ensureuptodate')
+@Git_routes.route('/app/Git/ensureuptodate')
+@check_access_token
 def index():
     th = threading.Thread(target=handle_repo)
     th.start()
     return 'cmd recived'
 
 
-@Git_routes.route('/v<float:version>/Git', methods=['GET', 'POST', 'PATH', 'DELETE'])
-def gitCtrl(version):
+@Git_routes.route('/app/Git', methods=['GET', 'POST', 'PATH', 'DELETE'])
+@check_access_token
+def gitCtrl(version=2.1):
     if version == 1.0:
         return abort(404)
     elif version == 2.0:
@@ -71,7 +74,6 @@ def gitCtrl(version):
         access_method = request.method
 
         if access_method == 'GET':
-            # db_show()
             repos = []
             gitrepos = Git.query.all()
             for gitrepo in gitrepos:
@@ -129,8 +131,9 @@ def gitCtrl(version):
         return abort(404)
 
 
-@Git_routes.route('/v<float:version>/Git/<reponame>', methods=['GET', 'POST', 'DELETE'])
-def gitrepoCtrl(version, reponame):
+@Git_routes.route('/app/Git/<reponame>', methods=['GET', 'POST', 'DELETE'])
+@check_access_token
+def gitrepoCtrl(reponame, version=2.1):
     if version == 1.0:
         return abort(404)
     elif version == 2.0:
@@ -152,7 +155,8 @@ def gitrepoCtrl(version, reponame):
 
 
 # test
-@Git_routes.route('/Git/addgit')
+@Git_routes.route('/app/Git/addgit')
+@check_access_token
 def test():
     request_data = request.form.to_dict()
 

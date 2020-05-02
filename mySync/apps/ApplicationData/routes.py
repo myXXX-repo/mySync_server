@@ -11,6 +11,8 @@ from mySync.apps.ApplicationData.models import modify_one_by_node
 from json import dumps as json_encode
 from json import loads as json_decode
 
+from mySync.common.access_token_check import check_access_token
+
 ApplicationData_routes = Blueprint('ApplicationData_routes', __name__)
 
 allowed_app_name = ['com.wh.mydeskclock', 'com.wh.myconan']
@@ -26,13 +28,16 @@ get_now_milli_time = lambda: int(time.time() * 1000)
 
 
 # 测试连接
+
 @ApplicationData_routes.route('/app/ApplicationData/v1.0/test', methods=['GET'])
+@check_access_token
 def test():
     return "server is fine"
 
 
 # get delete 全部数据
 @ApplicationData_routes.route('/app/ApplicationData/v1.0', methods=['GET'])
+@check_access_token
 def get_delete_all_data():
     request_method = request.method
     if request_method == 'GET':
@@ -54,6 +59,7 @@ def get_delete_all_data():
 
 # get post delete 指定app的全部数据
 @ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>', methods=['GET', 'POST', 'DELETE'])
+@check_access_token
 def get_post_delete_data(app_name):
     if app_name not in allowed_app_name:
         print(app_name)
@@ -112,7 +118,6 @@ def get_post_delete_data(app_name):
     elif request_method == 'DELETE':
         del_one_by_app_name(app_name=app_name)
         return "del " + app_name + " all data done"
-
 
 # @ApplicationData_routes.route('/app/ApplicationData/v1.0/delete', methods=['DELETE'])
 # def del_all_data():
