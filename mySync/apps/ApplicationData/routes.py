@@ -8,8 +8,10 @@ from mySync.apps.ApplicationData.models import del_one_by_app_name
 from mySync.apps.ApplicationData.models import get_all
 from mySync.apps.ApplicationData.models import get_data_by_app_name
 from mySync.apps.ApplicationData.models import modify_one_by_node
-from json import dumps as json_encode
-from json import loads as json_decode
+from mySync.common.libs import jsonDecode
+from mySync.common.libs import jsonEncode
+# from json import dumps as json_encode
+# from json import loads as json_decode
 
 from mySync.common.access_token_check import check_access_token
 
@@ -51,7 +53,7 @@ def get_delete_all_data():
                 "update_time": i.update_time
             }
             data_all.append(data)
-        return json_encode(data_all)
+        return jsonEncode(data_all)
     elif request_method == 'DELETE':
         del_all()
         return "del all done"
@@ -61,9 +63,9 @@ def get_delete_all_data():
 @ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>', methods=['GET', 'POST', 'DELETE'])
 @check_access_token
 def get_post_delete_data(app_name):
-    if app_name not in allowed_app_name:
-        print(app_name)
-        abort(403)
+    # if app_name not in allowed_app_name:
+    #     print(app_name)
+    #     abort(403)
 
     request_method = request.method
     # 获取 某app的全部数据
@@ -78,7 +80,7 @@ def get_post_delete_data(app_name):
                 "update_time": i.update_time
             }
             data_all.append(data)
-        return json_encode(data_all)
+        return jsonEncode(data_all)
 
     # 上传某app的全部数据
     elif request_method == 'POST':

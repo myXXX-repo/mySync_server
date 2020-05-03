@@ -65,7 +65,7 @@
         },
         mounted() {
             let that = this;
-            axios.get('/v2.1/Markdown/test.md').then(function(response){
+            axios.get('/v2.1/Markdown/sample.md').then(function(response){
                 that.markdown_data = response.data;
                 that.markdown_to_html();
             });

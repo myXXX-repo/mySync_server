@@ -2,9 +2,8 @@ from flask import Blueprint
 from flask import request
 from flask import abort
 from flask import render_template
-
-from json import dumps as jsonencode
-from json import loads as jsondecode
+from mySync.common.libs import jsonDecode
+from mySync.common.libs import jsonEncode
 
 from os import listdir, remove
 from os.path import exists
@@ -20,14 +19,15 @@ MARKDOWN_FOLDER = settings.MARKDOWN_FOLDER
 
 
 # html
-@Markdown_routes.route('/MarkdownIndex')
+@Markdown_routes.route('/app/Markdown')
+@Markdown_routes.route('/app/Markdown/Index')
 def Markdown_index():
-    return render_template('index_markdown.html', title1='Markdown', title2='Index')
+    return render_template('markdown/index_markdown.html', title1='Markdown', title2='Index')
 
 
-@Markdown_routes.route('/MarkdownEditor')
+@Markdown_routes.route('/app/Markdown/editor')
 def Markdown_editor():
-    return render_template('markdown_editor.html', title1='Markdown', title2='Editor')
+    return render_template('markdown/markdown_editor.html', title1='Markdown', title2='Editor')
 
 
 # -------------------------------
@@ -55,23 +55,19 @@ def get_post_res_list(version):
     # ------------------------------------------
     elif version == 2.1:
         if access_method == 'GET':
-            request_data = request.args.to_dict()
+            # request_data = request.args.to_dict()
             try:
-                markdown_list = jsonencode(listdir(MARKDOWN_FOLDER))
+                markdown_list = jsonEncode(listdir(MARKDOWN_FOLDER))
             except Exception as err:
                 print(err)
                 return abort(500)
             return markdown_list
-
         elif access_method == 'POST':
             return abort(404)
-
         elif access_method == 'DELETE':
-
             return abort(404)
         else:  # end of method
             return abort(405)
-
     else:  # end of version
         return abort(405)
 
@@ -109,14 +105,14 @@ def md_test(version, resid):
             if exists(real_path) and isfile(real_path):
                 with open(real_path, 'r') as filefd:
                     file_con = filefd.read()
-                return jsonencode(file_con)
+                return jsonEncode(file_con)
             else:
                 return abort(404)
 
         elif access_method == 'POST':
             request_data = request.form
             if 'con' in request_data:
-                file_new_con = jsondecode(request_data['con'])
+                file_new_con = jsonDecode(request_data['con'])
                 if exists(real_path) and isfile(real_path):
                     with open(real_path, 'w') as filefd:
                         filefd.write(file_new_con)

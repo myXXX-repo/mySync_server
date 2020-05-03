@@ -1,6 +1,14 @@
-from json import dumps as jsonencode
-from json import loads as jsondecode
+from json import dumps as json_encode
+from json import loads as json_decode
 import os
+
+
+def jsonDecode(json_str):
+    return json_decode(json_str)
+
+
+def jsonEncode(data_obj):
+    return json_encode(data_obj)
 
 
 class FileConCtrl:  # ctrl file
@@ -41,7 +49,7 @@ class DataArray:
         self.fileCtrl = FileConCtrl(filePath)
         json_datatmp = self.fileCtrl.read(AUTOCREATE=1)
         if json_datatmp != "":
-            self.dataArray = jsondecode(json_datatmp)
+            self.dataArray = json_decode(json_datatmp)
 
     def get(self):
         return self.dataArray
@@ -51,15 +59,15 @@ class DataArray:
 
     def add(self, new):
         self.dataArray.append(new)
-        self.fileCtrl.write_cover(jsonencode(self.dataArray))
+        self.fileCtrl.write_cover(json_encode(self.dataArray))
 
     def clear(self):
         self.dataArray = []
-        self.fileCtrl.write_cover(jsonencode(self.dataArray))
+        self.fileCtrl.write_cover(json_encode(self.dataArray))
 
     def delbyId(self, id):
         self.dataArray.pop(int(id))
-        self.fileCtrl.write_cover(jsonencode(self.dataArray))
+        self.fileCtrl.write_cover(json_encode(self.dataArray))
 
 
 class GitRepoCtrl:

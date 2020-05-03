@@ -4,7 +4,7 @@ from mySync.apps.Git.libs import GitRepoCtrl
 
 import threading
 
-from json import dumps as jsonencode
+from json import dumps as json_encode
 from mySync.apps.Git.models import db_insert, Git
 from mySync.common.access_token_check import check_access_token
 
@@ -87,7 +87,7 @@ def gitCtrl(version=2.1):
                         gitrepo.last_update_time]
                 repos.append(repo)
 
-            return jsonencode(repos)
+            return json_encode(repos)
 
         # ----------------------
         # app name: Git
