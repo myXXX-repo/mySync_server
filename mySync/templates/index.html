@@ -1,101 +1,97 @@
 {% extends "template.html" %}
 
 {% block addition_css %}
-    <style>
-        body {
-            padding-left: 9px;
-            padding-right: 9px;
-        }
+<style>
+    body {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
 
-        .con_body_item {
-            display: inline-block;
-            vertical-align: top;
-        }
+    .con_body_item {
+        display: inline-block;
+        vertical-align: top;
+    }
 
-        /*.panel_body {*/
-        /*    !* width: fit-content; *!*/
-        /*    display: inline;*/
-        /*    !* width: 300px; *!*/
-        /*}*/
+    /*.panel_body {*/
+    /*    !* width: fit-content; *!*/
+    /*    display: inline;*/
+    /*    !* width: 300px; *!*/
+    /*}*/
 
-        .panel {
-            margin-bottom: 3px;
-            margin-right: 5px;
-        }
+    .panel {
+        margin-bottom: 3px;
+        margin-right: 5px;
+    }
 
-        /* .display{
-                overflow-y: scroll;
-            } */
-    </style>
+    /* .display{
+            overflow-y: scroll;
+        } */
+</style>
 {% endblock %}
 
 {% block addition_js %}
-    <!-- <script src="http://wolfpc/recrepo/vue/vue-2.6.11-dev.js"></script> -->
-    <script src="/static/index.js"></script>
+<!-- <script src="http://wolfpc/recrepo/vue/vue-2.6.11-dev.js"></script> -->
+<script src="/static/index.js"></script>
 {% endblock %}
 
 {% block body %}
 
 
-    <div class="progress" id="progress">
-        <div class="progress-bar" role="progressbar" id='progress_bar' style="width: {{ per }}%">{{ per }} %</div>
-    </div>
+<!--    <div class="progress" id="progress">-->
+<!--        <div class="progress-bar" role="progressbar" id='progress_bar' style="width: {{ per }}%">{{ per }} %</div>-->
+<!--    </div>-->
 {% raw %}
-    <div class="con_body" id="api_panel">
+<div class="con_body" id="api_panel">
 
-        <div class="panel panel-info con_body_item" v-for="(node,index) in api_list">
+    <div class="panel panel-info con_body_item" v-for="(node,index) in api_list">
 
-            <div class="panel-heading" @click=hide_toggle(index)>
-                <h3 class="panel-title">{{node.title}} apis
-                    <!-- <a href="#"><small>hide</small></a> -->
-                </h3>
-            </div>
-            <div class="panel-body" v-for="(item,i) in node.list" v-show="node.show_list">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{i+1}}. {{item.api_name}} <small>{{item.method}}</small></h3>
-                    </div>
-                    <div class="panel-body">
-                        <a :href=this_address+item.routes>{{item.routes}}</a><br>
-                        <span v-html=item.details></span>
-                    </div>
+        <div class="panel-heading" @click=hide_toggle(index)>
+            <h3 class="panel-title">{{node.title}} apis
+                <!-- <a href="#"><small>hide</small></a> -->
+            </h3>
+        </div>
+        <div class="panel-body" v-for="(item,i) in node.list" v-show="node.show_list">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{i+1}}. {{item.api_name}} <small>{{item.method}}</small></h3>
+                </div>
+                <div class="panel-body">
+                    <a :href=this_address+item.routes>{{item.routes}}</a><br>
+                    <span v-html=item.details></span>
                 </div>
             </div>
-
         </div>
 
     </div>
 
-    <hr>
+</div>
 
-<!--    <div class="panel panel-default" id="Statistics_panel">-->
-<!--        <div class="panel-heading" @click=initStatisticsData()>-->
-<!--            <h3 class="panel-title">{{title}}</h3>-->
-<!--        </div>-->
-<!--        <div class="panel-body" id="display">-->
-<!--            <table class="table table-bordered table-hover">-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th>{{th[0]}}</th>-->
-<!--                    <th>{{th[1]}}</th>-->
-<!--                    <th>{{th[2]}}</th>-->
-<!--                    <th>{{th[3]}}</th>-->
-<!--                    <th>{{th[4]}}</th>-->
-<!--                    &lt;!&ndash; <th>{{th[5]}}</th> &ndash;&gt;-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr v-for="item in apis">-->
-<!--                    <td>{{item.appname}}</td>-->
-<!--                    <td>{{item.apiname}}</td>-->
-<!--                    <td>{{item.method}}</td>-->
-<!--                    <td>{{item.NumOfCall}}</td>-->
-<!--                    <td>{{item.LastCallTime}}</td>-->
-<!--                    &lt;!&ndash; <td><a href="#">set to zero</a></td> &ndash;&gt;-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
-<!--        </div>-->
-<!--    </div>-->
-    {% endraw %}
+<hr>
+
+<table id="route_list" border="1px">
+    <thead>
+    <tr>
+        <th>route</th>
+        <th>method(s)</th>
+        <th>endpoint</th>
+        <th>call times</th>
+        <th>last call time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="route in routes">
+        <td>{{route.route}}</td>
+        <td>
+            {{route.methods[0]}}
+            {{route.methods[1]}}
+            {{route.methods[2]}}
+            {{route.methods[3]}}
+            {{route.methods[4]}}
+            {{route.methods[5]}}
+        </td>
+        <td>{{route.endpoint}}</td>
+    </tr>
+    </tbody>
+</table>
+{% endraw %}
 {% endblock %}

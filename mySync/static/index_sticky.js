@@ -110,8 +110,4 @@ new Vue({
         this.devName = localStorage.getItem('devName');
         this.getData();
     },
-    mounted() {
-        // this.getData();
-        // $('#con').focus();
-    }
 });
