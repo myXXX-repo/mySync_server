@@ -19,13 +19,13 @@ class FileConCtrl:  # ctrl file
             os.mkdir(fileFolder)
         self.filePath = filePath
 
-    def write_append(self, str):
+    def write_append(self, strstr):
         with open(self.filePath, 'a') as filefd:
-            filefd.write(str + '\n')
+            filefd.write(strstr + '\n')
 
-    def write_cover(self, str):
+    def write_cover(self, strstr):
         with open(self.filePath, 'w') as filefd:
-            filefd.write(str)
+            filefd.write(strstr)
 
     def read(self, AUTOCREATE=0):
         data_to_return = ""
@@ -36,7 +36,7 @@ class FileConCtrl:  # ctrl file
                 data_to_return = filefd.read()
         else:
             # if file not exists
-            if AUTOCREATE == 1:
+            if AUTOCREATE == 1 or AUTOCREATE == 'True':
                 with open(self.filePath, 'w') as filefd:
                     filefd.write("")
                 pass
@@ -132,21 +132,9 @@ class GitRepoCtrl:
 
     def updateRepo(self):
         print('updating repo')
-        # os.system('{}&&{}'.format(
-        #     self.git_cmd_gotorepo,
-        #     self.git_cmd_createtmpbranch))
-        # os.system('{}&&{}'.format(
-        #     self.git_cmd_gotorepo,
-        #     self.git_cmd_checkouttmpbranch))
         os.system('{}&&{}'.format(
             self.git_cmd_gotorepo,
             self.git_cmd_pull))
-        # os.system('{}&&{}'.format(
-        #     self.git_cmd_gotorepo,
-        #     self.git_cmd_checkoutdefaultbranch))
-        # os.system('{}&&{}'.format(
-        #     self.git_cmd_gotorepo,
-        #     self.git_cmd_deltmpbranch))
         print('your branch is up to date')
 
     def ensureRepoUptodate(self):

@@ -19,43 +19,27 @@ class Sticky(db.Model):
 
     # 服务端 仅保存 创建时间戳和上次更新时间戳
 
+    # 保证客户端服务器上记录的相应时间戳一致的方法
+    # 客户端上传数据，获得服务器返回数据后，再保存新的数据（时间戳 或其他），一旦出现问题 直接抛弃时间戳的更改
+
     # 客户端通过比较本地的 更新远程时间戳 和 服务器的 上次更新时间戳
-    #       如果本地较新
-    #           并且服务器的 上次更新时间戳 和本地的 更新远程时间戳 一致 则直接上传更新
-    #           并且服务器的 上次更新时间戳 和本地的 更新远程时间戳 相比 小 则代表服务器端或客户端时间保存出现问题 需要特别处理
-    #           并且服务器的 上次更新时间戳 和本地的 更新远程时间戳 相比 大
-    #       如果云端较新
-
-
-
-
+    #       并且服务器的 上次更新时间戳 和本地的 更新远程时间戳 一致 则直接上传更新
+    #       并且服务器的 上次更新时间戳 和本地的 更新远程时间戳 相比 小 则代表服务器端或客户端时间保存出现问题 需要特别处理
+    #       并且服务器的 上次更新时间戳 和本地的 更新远程时间戳 相比 大
 
     # 客户端上传数据 根据创建时间戳唯一确认一条记录
 
 
-    # def add_save(self):
-    #     db.session.add(self)
-    #     db.session.commit()
-    #
-    # # def getAll(self):
-    # #     return
-
-
-def db_insert(title, con, time, dev_name, ip):
-    sticky = Sticky()
-    sticky.title = title
-    sticky.con = con
-    sticky.create_time = time
-    sticky.dev_name = dev_name
-    sticky.ip = ip
-
-    db.session.add(sticky)
-    db.session.commit()
-
-
-def add_one(sticky):
-    db.session.add(sticky)
-    db.session.commit()
+# def add_one(title, con, time, dev_name, ip):
+#     sticky = Sticky()
+#     sticky.title = title
+#     sticky.con = con
+#     sticky.create_time = time
+#     sticky.dev_name = dev_name
+#     sticky.ip = ip
+#
+#     db.session.add(sticky)
+#     db.session.commit()
 
 
 def add_ones(stickies=None):
@@ -69,5 +53,16 @@ def add_ones(stickies=None):
 def getAll():
     sticky = Sticky()
     result = sticky.query.all()
-    print(result.id)
+    return result
+
+
+def del_all():
+    result = -1
+    try:
+        db.session.query(Sticky).delete()
+        result = 0
+    except:
+        db.session.rollback()
+    finally:
+        db.session.commit()
     return result

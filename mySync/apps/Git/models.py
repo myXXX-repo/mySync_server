@@ -1,4 +1,8 @@
+import time
+
 from mySync.common.ext import db
+
+get_now_milli_time = lambda: int(time.time() * 1000)
 
 
 class Git(db.Model):
@@ -7,31 +11,38 @@ class Git(db.Model):
     remote_addr = db.Column(db.String(1024))
     local_addr = db.Column(db.String(1024))
     branch = db.Column(db.String(1024))
+    create_time = db.Column(db.String(100), default=get_now_milli_time)
     last_update_time = db.Column(db.String(1024))
     last_check_time = db.Column(db.String(1024))
     depth = db.Column(db.Integer)
     enabled = db.Column(db.Boolean)
 
-    def add_save(self):
-        db.session.add(self)
+
+def add_ones(gits=None):
+    if gits is None:
+        gits = []
+    for i in gits:
+        db.session.add(i)
+    db.session.commit()
+
+
+def del_one_by_repo_name(repo_name):
+    try:
+        Git.query.filter(Git.repo_name == repo_name).delete()
+    except:
+        db.session.rollback()
+    finally:
         db.session.commit()
 
 
-def db_insert(repo_name, remote_addr, local_addr, branch, depth):
-    git = Git()
-    git.repo_name = repo_name
-    git.remote_addr = remote_addr
-    git.local_addr = local_addr
-    git.branch = branch
-    git.depth = int(depth)
-    git.enabled = True
-    git.last_update_time = "null"
-    git.last_check_time = "null"
-    git.add_save()
+def del_all():
+    try:
+        db.session.query(Git).delete()
+    except:
+        db.session.rollback()
+    finally:
+        db.session.commit()
 
 
-def db_show(limit=0):
-    git = Git()
-    if limit != 0:
-        pass
-    pass
+def get_all():
+    return Git.query.all()

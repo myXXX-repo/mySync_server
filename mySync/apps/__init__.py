@@ -7,7 +7,7 @@ from mySync.apps.ApplicationData import init_app_ApplicationData
 
 
 def init_app(server):
-    # init_app_Git(server)
+    init_app_Git(server)
     init_app_Main(server)
     init_app_Markdown(server)
     init_app_Sticky(server)

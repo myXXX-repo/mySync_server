@@ -1,6 +1,6 @@
 import time
 
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, jsonify
 from mySync.apps.ApplicationData.models import ApplicationData
 from mySync.apps.ApplicationData.models import add_ones
 from mySync.apps.ApplicationData.models import del_all
@@ -10,8 +10,6 @@ from mySync.apps.ApplicationData.models import get_data_by_app_name
 from mySync.apps.ApplicationData.models import modify_one_by_node
 from mySync.common.libs import jsonDecode
 from mySync.common.libs import jsonEncode
-# from json import dumps as json_encode
-# from json import loads as json_decode
 
 from mySync.common.access_token_check import check_access_token
 
@@ -80,7 +78,7 @@ def get_post_delete_data(app_name):
                 "update_time": i.update_time
             }
             data_all.append(data)
-        return jsonEncode(data_all)
+        return jsonify(data_all)
 
     # 上传某app的全部数据
     elif request_method == 'POST':
