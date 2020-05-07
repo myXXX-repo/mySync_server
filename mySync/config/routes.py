@@ -1,5 +1,4 @@
-from json import dumps as jsonencode
-# from flask import Flask
+from flask import jsonify
 
 
 def add_route_getroutes(server):
@@ -30,6 +29,11 @@ def add_route_getroutes(server):
                 'methods': url_map_tmp_2_method[i].split(', '),
                 'endpoint': url_map_tmp_3_endpoint[i]}
             route.append(route_node)
-        return jsonencode(route)
+        route.sort(key=takeRoute)
+        return jsonify(route)
 
     return server
+
+
+def takeRoute(element):
+    return element['route']
