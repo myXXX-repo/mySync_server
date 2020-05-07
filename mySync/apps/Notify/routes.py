@@ -60,11 +60,16 @@ class Notify_list(Resource):
         return "delete all done"
 
 
+class Notify_list1(Notify_list):
+    pass
+
+
 Notify_routes = Blueprint('Notify_routes', __name__)
 
 Notify_api = Api(Notify_routes)
 
 Notify_api.add_resource(Notify_list, '/app/Notifies')
+Notify_api.add_resource(Notify_list1, '/app/Notify/v1.0/notifies')
 
 
 @Notify_routes.route('/app/Notify/<int:id_id>', methods=['GET'])
@@ -75,8 +80,21 @@ def get_item_by_id(id_id):
     return jsonify(notify[id_id])
 
 
+@Notify_routes.route('/app/Notify/v1.0/notify/<int:id_id>', methods=['GET'])
+@check_access_token
+def get_item_by_id1(id_id):
+    if id_id not in range(0, len(notify)):
+        return abort(404)
+    return jsonify(notify[id_id])
+
+
 @Notify_routes.route('/app/Notifies/get_len', methods=['GET'])
 def get_len():
+    return str(len(notify))
+
+
+@Notify_routes.route('/app/Notify/v1.0/get_len', methods=['GET'])
+def get_len1():
     return str(len(notify))
 
 
