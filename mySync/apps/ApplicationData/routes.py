@@ -23,8 +23,8 @@ get_now_milli_time = lambda: int(time.time() * 1000)
 # id app_name key_value create_time update_time
 
 # http://ip:port/app/ApplicationData/v1.0/test GET   for testing
-# http://ip:port/app/ApplicationData/v1.0 GET    get all data from sql
-# http://ip:port/app/ApplicationData/v1.0/<string:app_name> get   all data by
+# http://ip:port/app/ApplicationData/v1.0/all_data GET    get all data from sql
+# http://ip:port/app/ApplicationData/v1.0/data/<string:app_name> get   all data by
 
 
 # 测试连接
@@ -36,7 +36,7 @@ def test():
 
 
 # get delete 全部数据
-@ApplicationData_routes.route('/app/ApplicationData/v1.0', methods=['GET'])
+@ApplicationData_routes.route('/app/ApplicationData/v1.0/all_data', methods=['GET', 'DELETE'])
 @check_access_token
 def get_delete_all_data():
     request_method = request.method
@@ -58,12 +58,12 @@ def get_delete_all_data():
 
 
 # get post delete 指定app的全部数据
-@ApplicationData_routes.route('/app/ApplicationData/v1.0/<string:app_name>', methods=['GET', 'POST', 'DELETE'])
+@ApplicationData_routes.route('/app/ApplicationData/v1.0/data/<string:app_name>', methods=['GET', 'POST', 'DELETE'])
 @check_access_token
 def get_post_delete_data(app_name):
-    # if app_name not in allowed_app_name:
-    #     print(app_name)
-    #     abort(403)
+    if app_name not in allowed_app_name:
+        print(app_name)
+        abort(403)
 
     request_method = request.method
     # 获取 某app的全部数据
