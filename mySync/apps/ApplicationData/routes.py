@@ -19,10 +19,6 @@ allowed_app_name = ['com.wh.mydeskclock', 'com.wh.myconan']
 
 get_now_milli_time = lambda: int(time.time() * 1000)
 
-ApplicationData_routes = Blueprint('ApplicationData_routes', __name__)
-
-AppData_api = Api(ApplicationData_routes)
-
 
 class AppData_all(Resource):
     @check_access_token
@@ -56,12 +52,17 @@ class AppData_app_short_name(AppData_app):
     pass
 
 
+ApplicationData_routes = Blueprint('ApplicationData_routes', __name__)
+
+AppData_api = Api(ApplicationData_routes)
+
 AppData_api.add_resource(AppData_all, "/app/ApplicationData/v1.0/data_all")
 AppData_api.add_resource(AppData_all_short_name, "/app/AppData/v1.0/data_all")
 AppData_api.add_resource(AppData_app, "/app/ApplicationData/v1.0/data/<string:app_name>")
 AppData_api.add_resource(AppData_app_short_name, "/app/AppData/v1.0/data/<string:app_name>")
 
 
+@ApplicationData_routes.route('/app/AppData/v1.0/test', methods=['GET'])
 @ApplicationData_routes.route('/app/ApplicationData/v1.0/test', methods=['GET'])
 @check_access_token
 def test():
