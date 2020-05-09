@@ -61,9 +61,9 @@ def get_delete_all_data():
 @ApplicationData_routes.route('/app/ApplicationData/v1.0/data/<string:app_name>', methods=['GET', 'POST', 'DELETE'])
 @check_access_token
 def get_post_delete_data(app_name):
-    if app_name not in allowed_app_name:
-        print(app_name)
-        abort(403)
+    # if app_name not in allowed_app_name:
+    #     print(app_name)
+    #     abort(403)
 
     request_method = request.method
     # 获取 某app的全部数据
