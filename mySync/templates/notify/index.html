@@ -6,65 +6,183 @@
 
 {% block addition_js %}
 <script>
-    let address  = "/app/Notify/v1.0/notifies";
-    
+    Date.prototype.format = function (format) {
+        /*
+         * eg:format="yyyy-MM-dd hh:mm:ss";
+         */
+        var o = {
+            "M+": this.getMonth() + 1, // month
+            "d+": this.getDate(), // day
+            "h+": this.getHours(), // hour
+            "m+": this.getMinutes(), // minute
+            "s+": this.getSeconds(), // second
+            "q+": Math.floor((this.getMonth() + 3) / 3), // quarter
+            "S+": this.getMilliseconds()
+            // millisecond
+        }
 
-    new Vue({
-    el: "#notify_list_table",
-    data: {
-        notifies: ["a", "b", "c"]
-    },
-    mounted() {
-        console.log("mounted");
-        let that = this;
-        axios.get(address, {
-        headers: {access_token: 'asdf'}
-        }).then(function (response) {
-            that.notifies = response.data
-        }).catch(function (err) {
-            console.log(err);
-        });
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4
+                - RegExp.$1.length));
+        }
+
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                var formatStr = "";
+                for (var i = 1; i <= RegExp.$1.length; i++) {
+                    formatStr += "0";
+                }
+
+                var replaceStr = "";
+                if (RegExp.$1.length == 1) {
+                    replaceStr = o[k];
+                } else {
+                    formatStr = formatStr + o[k];
+                    var index = ("" + o[k]).length;
+                    formatStr = formatStr.substr(index);
+                    replaceStr = formatStr;
+                }
+                format = format.replace(RegExp.$1, replaceStr);
+            }
+        }
+        return format;
     }
-});
-</script>
-{% endblock %}
 
-{% block header %}
+    // var getFormatedDate = function (sss) {
+    //     var date = new Date(parseInt(sss));
+    //     return date.format("yyyy-MM-dd hh:mm:ss.SSS");
+    // }
+
+    if (localStorage.getItem('inited') !== '1') {
+        localStorage.setItem('inited', '1');
+        localStorage.setItem('dev_name', 'device');
+        localStorage.setItem('access_token', 'access_token');
+    }
+    let address = "/app/Notify/v1.0/notifies";
+    new Vue({
+        el: "#notify_panel",
+        data: {
+            notifies: [],
+            con: "",
+            dev_name: "",
+            access_token:"",
+        },
+        methods: {
+            format_time: function (sss) {
+                var date = new Date(parseInt(sss));
+                return date.format("yyyy-MM-dd hh:mm:ss.SSS");
+            },
+            post_notify: function () {
+                if (this.con == "") {
+                    alert("con is blank");
+                    return;
+                }
+                if (this.dev_name == "") {
+                    alert("dev name is blank");
+                    return;
+                }
+                localStorage.setItem('dev_name', this.dev_name);
+                localStorage.setItem('access_token', this.access_token);
+                axios({
+                    method: 'post',
+                    url: address,
+                    params: {
+                        con: this.con,
+                        dev_name: this.dev_name,
+                        notify_time: Date.now()
+                    },
+                    headers: { access_token: this.access_token }
+                }).then(function (response) {
+                    alert(response.data);
+                    location.reload();
+                }).catch(function (err) {
+                    alert(err);
+                });
+            },
+            get_notifies: function () {
+                localStorage.setItem('access_token', this.access_token);
+                let that = this;
+                axios.get(address, {
+                    headers: { access_token: this.access_token }
+                }).then(function (response) {
+                    that.notifies = response.data;
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            },
+            delete_all_notifies: function () {
+                localStorage.setItem('access_token', this.access_token);
+                axios({
+                    method: 'delete',
+                    url: address,
+                    headers: { access_token: this.access_token }
+                }).then(function (response) {
+                    alert(response.data);
+                    location.reload();
+                }).catch(function (err) {
+                    alert(err);
+                });
+            }
+        },
+        mounted() {
+            this.dev_name = localStorage.getItem('dev_name');
+            this.access_token=localStorage.getItem('access_token');
+            this.get_notifies();
+        }
+    });
+</script>
 {% endblock %}
 
 {% block body %}
 {% raw %}
-<br/>
 
-<input type="text" name="con" id="input_con" class="form-control" placeholder="input con here">
-<br/>
-<input type="text" name="dev name" id="input_dev_name" class="form-control" placeholder="input dev name here">
-<br/>
+<div id="notify_panel">
+    <div class="panel panel-default">
+        <div class="panel-body">
 
+            <label for="input-id" class="col-sm-2">con</label>
+            <input type="text" class="form-control" placeholder="input con here"
+                v-model="con">
+            <br />
 
-<button type="submit" class="btn btn-primary">Submit</button>
+            <label for="input-id" class="col-sm-2">dev name</label>
+            <input type="text" class="form-control"
+                placeholder="input dev name here" v-model="dev_name">
+            <br />
 
+            <label for="input-id" class="col-sm-3">access token</label>
+            <input type="password" class="form-control" placeholder="input access token here" autocomplete="off" v-model="access_token">
+            <br />
 
-<table class="table table-hover" id="notify_list_table">
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>con</th>
-            <th>dev name</th>
-            <th>notify time</th>            
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="(notify,i) in notifies">
-            <td>{{i+1}}</td>
-            <td>{{notify.con}}</td>
-            <td>{{notify.dev_name}}</td>
-            <td>{{notify.notify_time}}</td>
-        </tr>
-    </tbody>
-</table>
+            <button type="submit" class="btn btn-primary" v-on:click="post_notify">Submit</button>
+        </div>
+    </div>
 
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-hover" id="notify_list_table">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>con</th>
+                        <th>dev name</th>
+                        <th>notify time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(notify,i) in notifies">
+                        <td>{{i+1}}</td>
+                        <td>{{notify.con}}</td>
+                        <td>{{notify.dev_name}}</td>
+                        <!-- <td>{{notify.notify_time}}</td> -->
+                        <td>{{format_time(notify.notify_time)}}</td>
 
-
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-danger" v-on:click="delete_all_notifies">clear</button>
+        </div>
+    </div>   
+</div>
 {% endraw %}
 {% endblock %}

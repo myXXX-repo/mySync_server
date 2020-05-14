@@ -17,6 +17,7 @@ class Notify_list(Resource):
 
     @check_access_token
     def post(self):
+        print(request.json)
         must_exist_keys = ["notify_time", "con", "dev_name"]
         request_data = None
         if request.json is not None:
