@@ -97,8 +97,7 @@ new Vue({
         let that = this;
         axios({
             url:"/getroutes",
-            method: 'get',
-            header: ['access_token', 'asdf']
+            method: 'get'
         }).then(function (response) {
             console.log("aaaaa");
             that.routes = response.data

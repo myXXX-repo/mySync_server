@@ -1,0 +1,70 @@
+{% extends "template.html" %}
+
+
+{% block addition_css %}
+{% endblock %}
+
+{% block addition_js %}
+<script>
+    let address  = "/app/Notify/v1.0/notifies";
+    
+
+    new Vue({
+    el: "#notify_list_table",
+    data: {
+        notifies: ["a", "b", "c"]
+    },
+    mounted() {
+        console.log("mounted");
+        let that = this;
+        axios.get(address, {
+        headers: {access_token: 'asdf'}
+        }).then(function (response) {
+            that.notifies = response.data
+        }).catch(function (err) {
+            console.log(err);
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+{% raw %}
+<br/>
+
+<input type="text" name="con" id="input_con" class="form-control" placeholder="input con here">
+<br/>
+<input type="text" name="dev name" id="input_dev_name" class="form-control" placeholder="input dev name here">
+<br/>
+
+
+<button type="submit" class="btn btn-primary">Submit</button>
+
+
+<table class="table table-hover" id="notify_list_table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>con</th>
+            <th>dev name</th>
+            <th>notify time</th>            
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="(notify,i) in notifies">
+            <td>{{i+1}}</td>
+            <td>{{notify.con}}</td>
+            <td>{{notify.dev_name}}</td>
+            <td>{{notify.notify_time}}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+{% endraw %}
+{% endblock %}

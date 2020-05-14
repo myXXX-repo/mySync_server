@@ -1,4 +1,4 @@
-from flask import request, abort
+from flask import request, abort, render_template
 
 from flask_restful import Resource
 
@@ -70,6 +70,11 @@ Notify_api = Api(Notify_routes)
 
 Notify_api.add_resource(Notify_list, '/app/Notifies')
 Notify_api.add_resource(Notify_list1, '/app/Notify/v1.0/notifies')
+
+
+@Notify_routes.route('/app/Notify/index', methods=['GET'])
+def notify_index():
+    return render_template('notify/index.html', title1='Notify', title2='Index')
 
 
 @Notify_routes.route('/app/Notify/<int:id_id>', methods=['GET'])
