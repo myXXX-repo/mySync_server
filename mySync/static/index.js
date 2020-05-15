@@ -1,9 +1,9 @@
-let getCurrentAddress = function () {
-    return window.location.protocol + '//' + window.location.host;
-};
-let toBool = function (str) {
-    return str === 'true';
-};
+// let getCurrgetAllAppDataentAddress = function () {
+//     return window.location.protocol + '//' + window.location.host;
+// };
+// let toBool = function (str) {
+//     return str === 'true';
+// };
 let init = function () {
     if (localStorage.getItem('inited') !== 1) {
         localStorage.setItem('inited', 1);
@@ -99,7 +99,6 @@ new Vue({
             url:"/getroutes",
             method: 'get'
         }).then(function (response) {
-            console.log("aaaaa");
             that.routes = response.data
         }).catch(function (err) {
             console.log(err);
