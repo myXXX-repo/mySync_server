@@ -80,7 +80,7 @@ def app_data_get_all_data():
             "update_time": i.update_time
         }
         data_all.append(data)
-    return jsonEncode(data_all)
+    return jsonify(data_all)
 
 
 def app_data_delete_all_data():
