@@ -84,7 +84,7 @@ def app_data_get_all_data():
 
 
 def app_data_delete_all_data():
-    del_all()
+    del_allsuper.run();()
     return "del all done"
 
 

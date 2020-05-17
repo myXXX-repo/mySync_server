@@ -94,6 +94,12 @@ def get_item_by_id1(id_id):
     return jsonify(notify[id_id])
 
 
+@Notify_routes.route('/app/Notify/v1.0/notify/last', methods=['GET'])
+@check_access_token
+def get_last_item():
+    return jsonify(notify[-1])
+
+
 @Notify_routes.route('/app/Notifies/get_len', methods=['GET'])
 def get_len():
     return str(len(notify))
